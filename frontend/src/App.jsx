@@ -1,0 +1,28 @@
+import React from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Home from './pages/Home/Home';
+import Services from './pages/Services/Services';
+import ContactUs from './pages/ContactUs/ContactUs';
+import Shop from './pages/Shop/Shop';
+import Itemoverview from './pages/Itemoverview/Itemoverview';
+import Cart from './pages/Cart/Cart';
+function App() {
+  return (
+    <BrowserRouter>
+<Routes>
+  <Route path="/" element={<Home />} />
+  <Route path='/services' element={<Services />} />
+  <Route path='/contactus' element={<ContactUs />} />
+  <Route path='/shop' element={<Shop />} />
+  <Route path='/itemoverview/:productid' element={<Itemoverview />} />
+  <Route path='/cart' element={<Cart />} />
+  </Routes>
+</BrowserRouter>
+
+
+  )
+  
+
+}
+
+export default App
