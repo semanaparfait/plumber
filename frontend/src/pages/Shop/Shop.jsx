@@ -1,4 +1,4 @@
-import React from 'react'
+    import React, { lazy, Suspense } from 'react';
 import Navbar from '../../components/Navbar/Navbar'
 import Footer from '../../components/Footer/Footer'
 import { food_list } from '../../assets/try/assets'

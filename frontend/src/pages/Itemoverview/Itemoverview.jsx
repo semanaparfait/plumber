@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import Footer from '../../components/Footer/Footer'
 import Navbar from '../../components/Navbar/Navbar'
 import { food_list } from '../../assets/try/assets'
+import Account from '../../components/Account/Account';
 
 
 function Itemoverview() {
@@ -58,6 +59,7 @@ function Itemoverview() {
         </div>
 
         </div>
+        <Account />
         <div>
             <Footer />
         </div>

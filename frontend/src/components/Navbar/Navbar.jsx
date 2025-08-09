@@ -27,6 +27,7 @@ function Navbar() {
         <div className='flex items-center gap-2.5'>
             <button className=' rounded-[20px] bg-[green] text-[white] cursor-pointer' style={{padding:'5px 12px'}}>Book a call</button>
             <i className="fa-solid fa-cart-arrow-down text-[20px]"></i>
+            <i className="fa-solid fa-user text-2xl"></i>
         </div>
     </div>
   )
