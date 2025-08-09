@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import logo  from '../../assets/logo/logo.jpg'
 
 function Adminpage() {
+    const [activetab, setActivetab] = useState("dashboard")
     const [users, setUsers] = useState([]);
 
   useEffect(() => {
@@ -61,13 +62,14 @@ function Adminpage() {
             <div>
                 <img src={logo} alt="camapany logo"className='w-[6rem]' />
             </div>
-                <ul className=' v  gap-5 cursor-pointer hidden md:flex'>
-                    <li>Dashboard</li>
-                    <li>Users</li>
-                    <li>Products</li>
-                    <li>carts</li>
-                    <li>Upload</li>
-                    <li>Hired us</li>
+                <ul className='gap-5 cursor-pointer hidden md:flex'>
+                    <li onClick={()=>setActivetab("dashboard")}>Dashboard</li>
+                    <li onClick={()=>setActivetab("users")}>Users</li>
+                    <li onClick={()=>setActivetab("product")}>Products</li>
+                    <li onClick={()=>setActivetab("carts")}>carts</li>
+                    <li onClick={()=>setActivetab("upload")}>Upload</li>
+                    <li onClick={()=>setActivetab("hired us")}>Hired us</li>
+                    <li onClick={()=>setActivetab("contacted us")}>contacted us</li>
                 </ul>
   
             <div>
@@ -78,9 +80,62 @@ function Adminpage() {
                     </Link>
 
             </div>
-        </nav>
+        </nav><br /><br />
+        {/* admin dashboard */}
+            {/* by defaoult this is the admin Dashboard */}
+            {activetab === 'dashboard' && (
+            <div >
+                <div className=" flex flex-wrap justify-around gap-4">
+                    
+                    <div className="flex items-center justify-center text-[24px] gap-4 rounded-[8px] bg-[white] " style={{ padding: '20px', boxShadow: '0 3px 10px rgba(0,0,0,0.05)' }}>
+
+                        <div className=" bg-[rgba(52,152,219,0.1)] text-[#3498db] rounded-[8px]"style={{padding:'10px'}}>
+                        <i className="fas fa-film"></i>
+                        </div>
+                        <div className="stat-details">
+                        <h3 className='text-[24px] text-[black] font-bold'>2,584</h3>
+                        <p className='text-[#777] text-[14px]'>Total Movies</p>
+                        </div>
+                    </div>
+                    
+                    <div className="flex items-center justify-center text-[24px] gap-4 rounded-[8px] bg-[white] " style={{ padding: '20px', boxShadow: '0 3px 10px rgba(0,0,0,0.05)' }}>
+                        <div className="bg-[rgba(46,204,113,0.1)] text-[#2ecc71] rounded-[8px]" style={{padding:'10px'}}>
+                        <i className="fas fa-users"></i>
+                        </div>
+                        <div className="stat-details">
+                        <h3 className='text-[24px] text-[black] font-bold'>18,249</h3>
+                        <p className='text-[#777] text-[14px]'>Total Users</p>
+                        </div>
+                    </div>
+                    
+                    <div className="flex items-center justify-center text-[24px] gap-4 rounded-[8px] bg-[white] " style={{ padding: '20px', boxShadow: '0 3px 10px rgba(0,0,0,0.05)' }}>
+                        <div className="bg-[rgba(231,76,60,0.1)] text-[#f39c12] rounded-[8px]" style={{padding:'10px'}}>
+                        <i className="fas fa-star"></i>
+                        </div>
+                        <div className="stat-details">
+                        <h3 className='text-[24px] text-[black] font-bold'>48,362</h3>
+                        <p className='text-[#777] text-[14px]'>Total Reviews</p>
+                        </div>
+                    </div>
+                    
+                    <div className="flex items-center justify-center text-[24px] gap-4 rounded-[8px] bg-[white] " style={{ padding: '20px', boxShadow: '0 3px 10px rgba(0,0,0,0.05)' }}>
+                        <div className=" bg-[#e74c3c] rounded-[8px]" style={{padding:'10px'}}>
+                        <i className="fas fa-dollar-sign"></i>
+                        </div>
+                        <div className="stat-details">
+                        <h3 className='text-[24px] text-[black] font-bold'>$52,489</h3>
+                        <p className='text-[#777] text-[14px]'>Monthly Revenue</p>
+                        </div>
+                    </div>
+                    </div><br /><br />
+ 
+
+            </div>
+            )}
         {/* fetching users */}
-        <div className="overflow-x-auto px-4 hidden">
+        {activetab === 'users' && (
+
+        <div className="overflow-x-auto px-4 ">
                 <table className='recent-table w-full'>
                 <thead className='bg-gray-100'>
                     <tr>
@@ -107,8 +162,11 @@ function Adminpage() {
                     {/* Add more rows as needed */}
             </table>
         </div>
+        )}
         {/* add products */}
-        <div className='flex items-center justify-center hidden'
+        {activetab === 'upload' && (
+
+        <div className='flex items-center justify-center '
         style={{paddingTop:'2rem'}}>
         <div className=' w-1/2 '>
             <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
@@ -199,7 +257,10 @@ function Adminpage() {
 
         </div>
           </div>
+        )}
           {/* fetching contact us messages */}
+          {activetab === 'contacted us' && (
+
           <div>
             <h2 className='text-center text-2xl font-bold'>Contact Us Messages</h2>
             <table className='recent-table w-full'>
@@ -228,6 +289,7 @@ function Adminpage() {
                 </tbody>
             </table>
           </div>
+          )}
     </div>
   )
 }

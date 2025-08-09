@@ -4,6 +4,7 @@ import contact from '../../assets/contactus/contactus.jpg'
 import Navbar from '../../components/Navbar/Navbar'
 import Footer from '../../components/Footer/Footer'
 import bg1 from "../../assets/services/bgservices.jpg";
+import arrow from '../../assets/contactus/arrow.png'
 
 
 function ContactUs() {
@@ -54,10 +55,15 @@ function ContactUs() {
     <main>
         <Navbar/>
         <div
-        className='w-full h-[70vh]'
+        className='w-full h-[100vh] md:h-[70vh] flex items-center justify-center flex-col gap-6'
         style={{background:'rgb(207, 225, 229)'}}>
-            <h1>Contact Us</h1>
-            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Odit expedita error sit. At perspiciatis hic unde vel ducimus iusto non, perferendis labore ad culpa quod libero aut officiis, eos reprehenderit!</p>
+          <img src={arrow} alt="arrow decoration" className='w-[7rem] absolute top-[10%] left-[10%]'/>
+          <div className='relative flex flex-col items-center gap-4'>
+
+            <h1 className='font-black text-5xl md:text-7xl text-center'>Contact Us</h1>
+            <p className=' text-center w-full md:w-[50%]'>Need a reliable plumber you can trust? We fix leaks, unclog drains, and install systems fast. Call now for expert service, honest pricing, and lasting results for your home or business.</p>
+          </div>
+            <img src={arrow} alt="arrow decoration" className='w-[7rem] absolute bottom-0 md:bottom-[20%] right-[10%]'/>
         </div>
         <div style={{padding:'40px'}}>
 
@@ -70,14 +76,14 @@ function ContactUs() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder='name'
-                className='rounded-3xl h-[2.5rem] w-full md:w-[50%]'
+                className='rounded-2xl h-[2.5rem] w-full md:w-[50%]'
                  style={{background:'rgb(207, 225, 229)',paddingLeft:'10px'}}
                 />
                  <input type="number"
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
                  placeholder='phonenumber' 
-                className='rounded-3xl h-[2.5rem] w-full md:w-[50%]'
+                className='rounded-2xl h-[2.5rem] w-full md:w-[50%]'
                  style={{background:'rgb(207, 225, 229)',paddingLeft:'10px'}}
                  />
                 </div>
@@ -86,15 +92,15 @@ function ContactUs() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder='Email' 
-                className='rounded-3xl h-[2.5rem]'
+                className='rounded-2xl h-[2.5rem]'
                  style={{background:'rgb(207, 225, 229)',paddingLeft:'10px'}}
                 />
                  <textarea  cols="20" rows="5"
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                  placeholder='Message'
-                 className='rounded-3xl'
-                 style={{background:'rgb(207, 225, 229)',resize:'none',paddingLeft:'10px'}}
+                 className='rounded-2xl'
+                 style={{background:'rgb(207, 225, 229)',resize:'none',padding:'20px 10px'}}
                  ></textarea>
                  <button 
                  type='submit'
@@ -102,18 +108,18 @@ function ContactUs() {
                  style={{background:'rgb(100, 145, 150)',padding:'7px 20px'}}>Submit</button>
                  </form>
             </div>
-            <div className='relative text-white rounded-[10px] '
-            style={{backgroundImage: `url(${bg1})`,borderRadius:'10px'}}>
-                <div className="absolute inset-0 bg-black/60"></div>
+            <div className='relative text-white rounded-3xl  h-[17rem] text-center'
+            style={{backgroundImage: `url(${bg1})`,borderRadius:'20px',padding:'20px'}}>
+                <div className="absolute inset-0 bg-black/60 rounded-3xl"></div>
                 <div className='flex flex-col gap-2 relative text-center items-center justify-center'>
-                    <h1 className='font-bold'>Our Newsletters</h1>
-                    <p>Lorem ipsum dolor sit amet <br /> consectetur adipisicing elit. <br /> Sint saepe tempore alias, fugit nostrum  </p>
+                    <h1 className='font-bold text-2xl'>Our Newsletters</h1>
+                    <p>Lorem ipsum dolor sit amet <br /> consectetur adipisicing elit. <br /> Sint saepe tempore alias, fugit   </p>
                     <form className='flex flex-col gap-4'>
                         <input type="email"
                         placeholder='Email'
                         className='bg-[#ffffff] rounded-3xl h-[2.5rem] text-[black] outline-none' 
                         style={{paddingLeft:'10px'}}/>
-                        <button className='text-[white] bg-[black] rounded-3xl font-bold'
+                        <button className='text-[white] bg-[#199233] rounded-3xl font-bold'
                         style={{padding:'7px 20px'}}
                         >Subscribe to Newsletter</button>
                     </form>
@@ -121,9 +127,21 @@ function ContactUs() {
             </div>
         </div>
         </div>
-        <div style={{padding:'40px'}}>
+        <div style={{padding:'40px'}} className='relative'>
+          <div className='relative'>
+                <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1771.0241351126176!2d30.080213922644408!3d-1.9826346604764145!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x19dca6108d6db08d%3A0xbfc486d1fb045285!2sKK%20567%20St%2C%20Kigali!5e1!3m2!1sen!2srw!4v1752690422812!5m2!1sen!2srw"
+      width="100%"
+      height="450"
+      style={{ border: 0 }}
+      allowFullScreen=""
+      loading="lazy"
+      referrerPolicy="no-referrer-when-downgrade"
+      className="rounded-xl shadow"
+    ></iframe><br /><br />
+          </div>
 
-        <div className='flex gap-4 flex-wrap justify-center'>
+        <div className='flex gap-4 flex-wrap justify-center absolute bottom-0 right-0 left-0'>
           {/* <!-- Location --> */}
           <div className="contact-box flex flex-col gap-3 rounded-3xl text-[white]"
           style={{backgroundColor:'rgb(154, 184, 186)',padding:'10px 30px'}}>
@@ -133,7 +151,7 @@ function ContactUs() {
               <h3>Location <br /><strong>Visit Us At</strong> </h3>
             
             </div>
-              <p>65th Street, Los Angeles.<br />3rd Street, San Andreas.</p>
+              <p>KG 33avenue Kigali Gisozi <br />copcom business center <br />door number CR046</p>
           </div>
   
           {/* <!-- Phone --> */}
@@ -144,7 +162,7 @@ function ContactUs() {
               <i className="fas fa-phone-alt"></i>
               <h3>24/7 Service <br /><strong>Call Us On</strong></h3>
             </div>
-              <p>Tel: +81-245-54896<br />Mob: +81-125-87965</p>
+              <p>Tel: +250 78217 1515<br />Mob: +250 78217 1515</p>
           </div>
   
           {/* <!-- Email --> */}
@@ -155,7 +173,7 @@ function ContactUs() {
               <i className="fas fa-envelope"></i>
               <h3>Drop A Line <br /><strong>Mail Address</strong></h3>
             </div>
-              <p>info@domain.com<br />domain@company.com</p>
+              <p>Info@einsteinplumbers.rw<br />semana.coder.expert.com</p>
           </div>
         </div>
         </div>

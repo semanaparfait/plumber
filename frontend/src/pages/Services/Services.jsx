@@ -25,12 +25,9 @@ function Services() {
       <br />
       <div>
         <div className=" flex flex-col items-center gap-2.5">
-          <h1 className="text-center font-bold text-[24px]">Our Services</h1>
+          <h1 className="text-center font-bold text-[24px]">Our Services  —  What We Do Best</h1>
           <p className="text-center w-[80%] md:w-[50%]">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur
-            nihil, maxime, in repellat tempore debitis sint quasi repellendus,
-            ipsa perferendis magni ut voluptate voluptatem quis eveniet deleniti
-            natus voluptatum. Quisquam!
+We provide expert plumbing solutions, from leak repairs to new installations. Our team handles clogged drains, pipe replacements, and water heater services quickly and professionally, ensuring quality results every time.
           </p>
         </div>
         <br />
@@ -52,7 +49,7 @@ function Services() {
               </div>
 
               {/* Text content */}
-              <div className="text-center border">
+              <div className="text-center shadow-lg rounded-br-[10px] rounded-bl-[10px]">
                 <br />
                 <h2 className="font-bold text-lg">Water Line Repair</h2>
                 <p className="text-sm text-gray-600 mt-1">
@@ -62,7 +59,7 @@ function Services() {
                 <br />
                 <p className="mt-2 text-blue-600 font-semibold cursor-pointer hover:underline">
                   Learn More
-                </p>
+                </p><br />
               </div>
             </div>
 
@@ -82,7 +79,7 @@ function Services() {
               </div>
 
               {/* Text content */}
-              <div className="text-center border">
+              <div className="text-center shadow-lg rounded-br-[10px] rounded-bl-[10px]">
                 <br />
                 <h2 className="font-bold text-lg">Water Line Repair</h2>
                 <p className="text-sm text-gray-600 mt-1">
@@ -92,7 +89,7 @@ function Services() {
                 <br />
                 <p className="mt-2 text-blue-600 font-semibold cursor-pointer hover:underline">
                   Learn More
-                </p>
+                </p><br />
               </div>
             </div>
             <div className="service-card min-w-[200px] ">
@@ -111,7 +108,7 @@ function Services() {
               </div>
 
               {/* Text content */}
-              <div className="text-center border">
+              <div className="text-center shadow-lg rounded-br-[10px] rounded-bl-[10px]">
                 <br />
                 <h2 className="font-bold text-lg">Water Line Repair</h2>
                 <p className="text-sm text-gray-600 mt-1">
@@ -121,7 +118,7 @@ function Services() {
                 <br />
                 <p className="mt-2 text-blue-600 font-semibold cursor-pointer hover:underline">
                   Learn More
-                </p>
+                </p><br />
               </div>
             </div>
             <div className="service-card min-w-[200px] ">
@@ -140,7 +137,7 @@ function Services() {
               </div>
 
               {/* Text content */}
-              <div className="text-center border">
+              <div className="text-center shadow-lg rounded-br-[10px] rounded-bl-[10px]">
                 <br />
                 <h2 className="font-bold text-lg">Water Line Repair</h2>
                 <p className="text-sm text-gray-600 mt-1">
@@ -170,7 +167,7 @@ function Services() {
               </div>
 
               {/* Text content */}
-              <div className="text-center border">
+              <div className="text-center shadow-lg rounded-br-[10px] rounded-bl-[10px]">
                 <br />
                 <h2 className="font-bold text-lg">Water Line Repair</h2>
                 <p className="text-sm text-gray-600 mt-1">
@@ -180,7 +177,7 @@ function Services() {
                 <br />
                 <p className="mt-2 text-blue-600 font-semibold cursor-pointer hover:underline">
                   Learn More
-                </p>
+                </p><br />
               </div>
             </div>
 
@@ -200,7 +197,7 @@ function Services() {
               </div>
 
               {/* Text content */}
-              <div className="text-center border">
+              <div className="text-center shadow-lg rounded-br-[10px] rounded-bl-[10px]">
                 <br />
                 <h2 className="font-bold text-lg">Water Line Repair</h2>
                 <p className="text-sm text-gray-600 mt-1">
@@ -210,7 +207,7 @@ function Services() {
                 <br />
                 <p className="mt-2 text-blue-600 font-semibold cursor-pointer hover:underline">
                   Learn More
-                </p>
+                </p><br />
               </div>
             </div>
           </div>

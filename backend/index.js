@@ -22,7 +22,7 @@ app.use('/uploads', express.static('uploads'));
 app.use(cookieParser()); // Middleware to parse cookies
 const isNeon = process.env.DATABASE_URL?.includes("neon.tech");
 app.use(cors({
-  origin: 'http://localhost:5174',
+  origin: 'http://localhost:5173',
   credentials: true,
 }));
 
