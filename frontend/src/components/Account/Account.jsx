@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import { useNavigate } from 'react-router-dom';
 
 function Account() {
   const [action, setAction] = useState("Sign up")
@@ -6,9 +7,10 @@ function Account() {
   const [phonenumber, setPhonenumber] = useState("")
   const [password, setPassword] = useState("")
     const [showModal, setShowModal] = useState(true); // 👈 Modal visibility
+    const navigate = useNavigate();
 
   if (!showModal) return null; // Hide modal if false
-    const submitform = (e) => {
+        const submitform = async (e) => {
         e.preventDefault();
         // Handle form submission logic here
         console.log({ username, phonenumber, password });
@@ -16,10 +18,10 @@ function Account() {
   if (action === "Sign up") {
     // Call backend signup API
     try {
-      const response = await fetch('https:localhost://5000/api/signup', {
+       const response = await fetch('http://localhost:5000/api/signup', {  
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, email, phonenumber, password }),
+        body: JSON.stringify({ username, phonenumber, password }),
       });
 
       const data = await response.json();
@@ -38,16 +40,21 @@ function Account() {
   } else if (action === "Log in") {
     // Call backend login API
     try {
-      const response = await fetch('https://new-movie-app.onrender.com/api/login', {
+      const response = await fetch('http://localhost:5000/api/login', { 
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password }),
+         credentials: 'include',
+        body: JSON.stringify({ phonenumber, password }),
       });
 
       const data = await response.json();
       if (response.ok) {
         alert(data.message);
-        navigate("/"); // Redirect on success
+          if (data.is_admin === true) {
+        navigate("/admin"); // Navigate to admin page
+    } else {
+        navigate("/"); // Navigate to home page
+    }
       } else {
         alert(data.message);
       }
@@ -56,11 +63,11 @@ function Account() {
     }
   }
 };
-    };
+    
   return (
     <div className='absolute top-0 left-0 w-full h-full bg-black/20 '>
 
-    <div className='inset-0  h-screen relative'>
+    <div className='inset-0 h-screen relative'>
 
         <form onSubmit={submitform}>
     <div className='flex flex-col items-center justify-center gap-4 p-8 bg-white rounded-lg shadow-md absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[90%] md:w-[27%]'

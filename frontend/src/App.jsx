@@ -6,6 +6,7 @@ import ContactUs from './pages/ContactUs/ContactUs';
 import Shop from './pages/Shop/Shop';
 import Itemoverview from './pages/Itemoverview/Itemoverview';
 import Cart from './pages/Cart/Cart';
+import Adminpage from './pages/Adminpage/Adminpage';
 function App() {
   return (
     <BrowserRouter>
@@ -16,9 +17,9 @@ function App() {
   <Route path='/shop' element={<Shop />} />
   <Route path='/itemoverview/:productid' element={<Itemoverview />} />
   <Route path='/cart' element={<Cart />} />
+  <Route path='/admin' element={<Adminpage />} />
   </Routes>
 </BrowserRouter>
-
 
   )
   

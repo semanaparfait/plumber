@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import './ContactUs.css'
 import contact from '../../assets/contactus/contactus.jpg'
 import Navbar from '../../components/Navbar/Navbar'
@@ -7,6 +7,49 @@ import bg1 from "../../assets/services/bgservices.jpg";
 
 
 function ContactUs() {
+  const [name, setName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const handleSubit = async (e) => {
+    e.preventDefault();
+
+    if (!name || !phoneNumber || !email || !message) {
+      alert("Please fill in all fields.");
+      return;
+    }
+
+    const contactData = {
+      name,
+      phoneNumber,
+      email,
+      message
+    };
+
+    try {
+      const response = await fetch('http://localhost:5000/api/contactus', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(contactData)
+      });
+
+      if (response.ok) {
+        alert("Message sent successfully!");
+        setName("");
+        setPhoneNumber("");
+        setEmail("");
+        setMessage("");
+      } else {
+        alert("Failed to send message. Please try again later.");
+      }
+    } catch (error) {
+      console.error("Error sending message:", error);
+      alert("An error occurred while sending your message.");
+    }
+  }
+
   return (
     <main>
         <Navbar/>
@@ -20,15 +63,19 @@ function ContactUs() {
 
         <div className='flex gap-5 md:gap-[10rem] justify-center flex-wrap'>
             <div className=' md:w-[45%]'>
-                <form className='flex flex-col gap-4 '>
+                <form className='flex flex-col gap-4 'onSubmit={handleSubit}>
                 <div className=' flex  gap-2'>
                     
                 <input type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 placeholder='name'
                 className='rounded-3xl h-[2.5rem] w-full md:w-[50%]'
                  style={{background:'rgb(207, 225, 229)',paddingLeft:'10px'}}
                 />
                  <input type="number"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
                  placeholder='phonenumber' 
                 className='rounded-3xl h-[2.5rem] w-full md:w-[50%]'
                  style={{background:'rgb(207, 225, 229)',paddingLeft:'10px'}}
@@ -36,16 +83,21 @@ function ContactUs() {
                 </div>
 
                 <input type="text"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder='Email' 
                 className='rounded-3xl h-[2.5rem]'
                  style={{background:'rgb(207, 225, 229)',paddingLeft:'10px'}}
                 />
                  <textarea  cols="20" rows="5"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
                  placeholder='Message'
                  className='rounded-3xl'
                  style={{background:'rgb(207, 225, 229)',resize:'none',paddingLeft:'10px'}}
                  ></textarea>
                  <button 
+                 type='submit'
                  className='text-white rounded-3xl text-[14px] w-[8rem]'
                  style={{background:'rgb(100, 145, 150)',padding:'7px 20px'}}>Submit</button>
                  </form>
@@ -77,7 +129,7 @@ function ContactUs() {
           style={{backgroundColor:'rgb(154, 184, 186)',padding:'10px 30px'}}>
             <div className="heading flex items-center gap-3" >
 
-              <i class="fas fa-map-marker-alt"></i>
+              <i className="fas fa-map-marker-alt"></i>
               <h3>Location <br /><strong>Visit Us At</strong> </h3>
             
             </div>
@@ -89,7 +141,7 @@ function ContactUs() {
           style={{backgroundColor:'rgb(168, 194, 196)',padding:'10px 30px'}}>
             <div className="heading flex items-center gap-3">
 
-              <i class="fas fa-phone-alt"></i>
+              <i className="fas fa-phone-alt"></i>
               <h3>24/7 Service <br /><strong>Call Us On</strong></h3>
             </div>
               <p>Tel: +81-245-54896<br />Mob: +81-125-87965</p>
@@ -100,7 +152,7 @@ function ContactUs() {
           style={{backgroundColor:'rgb(188, 210, 211)',padding:'10px 30px'}}>
             <div className="heading flex items-center gap-3">
 
-              <i class="fas fa-envelope"></i>
+              <i className="fas fa-envelope"></i>
               <h3>Drop A Line <br /><strong>Mail Address</strong></h3>
             </div>
               <p>info@domain.com<br />domain@company.com</p>

@@ -120,7 +120,7 @@ export const food_list = [
     {
         _id: "1",
         name: "Greek salad",
-        image: food_1,
+        image: 'https://i.pinimg.com/1200x/5f/58/de/5f58de70b3e4376fe05ea86f3631520e.jpg',
         price: 12,
         description: "Food provides essential nutrients for overall health and well-being",
         category: "Salad"
@@ -128,49 +128,49 @@ export const food_list = [
     {
         _id: "2",
         name: "Veg salad",
-        image: food_2,
+        image:'https://i.pinimg.com/1200x/1e/e5/c5/1ee5c5f8a8fd056af24a7160ef738446.jpg',
         price: 18,
         description: "Food provides essential nutrients for overall health and well-being",
         category: "Salad"
     }, {
         _id: "3",
         name: "Clover Salad",
-        image: food_3,
+        image: 'https://i.pinimg.com/736x/de/d1/95/ded195ad45a783e5721fe8753e877832.jpg',
         price: 16,
         description: "Food provides essential nutrients for overall health and well-being",
         category: "Salad"
     }, {
         _id: "4",
         name: "Chicken Salad",
-        image: food_4,
+        image: 'https://i.pinimg.com/736x/51/f0/26/51f0265d1c90acaf8ca5ff03583b3204.jpg',
         price: 24,
         description: "Food provides essential nutrients for overall health and well-being",
         category: "Salad"
     }, {
         _id: "5",
         name: "Lasagna Rolls",
-        image: food_5,
+        image: 'https://i.pinimg.com/1200x/c4/1e/72/c41e72a3bfe96e66dba755ac85ff171b.jpg',
         price: 14,
         description: "Food provides essential nutrients for overall health and well-being",
         category: "Rolls"
     }, {
         _id: "6",
         name: "Peri Peri Rolls",
-        image: food_6,
+        image: 'https://i.pinimg.com/736x/59/d5/08/59d508544d623daff6650ee4ab091ce9.jpg',
         price: 12,
         description: "Food provides essential nutrients for overall health and well-being",
         category: "Rolls"
     }, {
         _id: "7",
         name: "Chicken Rolls",
-        image: food_7,
+        image: 'https://i.pinimg.com/736x/1b/2f/85/1b2f856a1e1b72d977d429528040bb60.jpg',
         price: 20,
         description: "Food provides essential nutrients for overall health and well-being",
         category: "Rolls"
     }, {
         _id: "8",
         name: "Veg Rolls",
-        image: food_8,
+        image: 'https://i.pinimg.com/736x/0d/1e/56/0d1e561fc92b018e1cdedc14dab4f3b0.jpg',
         price: 15,
         description: "Food provides essential nutrients for overall health and well-being",
         category: "Rolls"
