@@ -23,6 +23,15 @@ function Adminpage() {
         .then(data => setContactUsMessages(data))
         .catch(err => console.error('Error fetching contact us messages:', err));
     }, []);
+//   fetching news letter
+    const [newsLetterSubscribers, setNewsLetterSubscribers] = useState([]);
+    useEffect(() => {
+        fetch('http://localhost:5000/api/subscribe')
+        .then(res => res.json())  
+        .then(data => setNewsLetterSubscribers(data))
+        .catch(err => console.error('Error fetching news letter subscribers:', err));
+    }, []);
+
 //   inserting into category table
   const [categoryName, setCategoryName] = useState("");
   const [categoryImage, setCategoryImage] = useState(null);
@@ -70,6 +79,7 @@ function Adminpage() {
                     <li onClick={()=>setActivetab("upload")}>Upload</li>
                     <li onClick={()=>setActivetab("hired us")}>Hired us</li>
                     <li onClick={()=>setActivetab("contacted us")}>contacted us</li>
+                    <li onClick={()=>setActivetab("news letter")}>News Letter</li>
                 </ul>
   
             <div>
@@ -290,6 +300,30 @@ function Adminpage() {
             </table>
           </div>
           )}
+          {/* fetching news letter subscribers */}
+          {activetab === 'news letter' && (
+          <div>
+            <h2 className='text-center text-2xl font-bold'>News Letter Subscribers</h2>
+            <table className='recent-table w-full'>
+                <thead className='bg-gray-100'>
+                    <tr>
+                        <th>Email</th>
+                        <th>Subscribed At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {newsLetterSubscribers.map(subscriber => (
+                        <tr key={subscriber.id}>
+                            <td>{subscriber.id}</td>
+                            <td>{subscriber.email}</td>
+                            <td>{new Date(subscriber.sended_at).toLocaleString()}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            </div>
+          )}
+            
     </div>
   )
 }

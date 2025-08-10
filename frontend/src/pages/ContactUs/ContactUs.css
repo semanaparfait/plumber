@@ -1,2 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
 
+.done-notification{
+
+    background-color: #4CAF50; /* Green */
+
+    box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
+    animation: identifier 1.4s ease-in-out forwards;
+    /* opacity: 0; */
+
+}
+@keyframes identifier {
+  0% {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-10px);
+  }
+    
+}
