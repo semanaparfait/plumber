@@ -1,15 +1,16 @@
 import React, {useState} from 'react'
 import { useNavigate } from 'react-router-dom';
 
-function Account() {
+function Account({ onClose }) {
+
   const [action, setAction] = useState("Sign up")
   const [username, setUsername] = useState("")
   const [phonenumber, setPhonenumber] = useState("")
   const [password, setPassword] = useState("")
-    const [showModal, setShowModal] = useState(true); // 👈 Modal visibility
+    // const [showModal, setShowModal] = useState(true); // 👈 Modal visibility
     const navigate = useNavigate();
 
-  if (!showModal) return null; // Hide modal if false
+  // if (!showModal) return null; // Hide modal if false
         const submitform = async (e) => {
         e.preventDefault();
         // Handle form submission logic here
@@ -74,7 +75,8 @@ function Account() {
     style={{padding:'40px 1px'}}>
         <i className="fa-solid fa-xmark absolute top-[7%] right-[8%] border rounded-full "
         style={{padding:'3px 5px'}}
-        onClick={() => setShowModal(false)} // 👈 Close modal
+        onClick={onClose}
+        // onClick={() => setShowModal(false)} // 👈 Close modal
         ></i>
         <h1 className='text-2xl font-bold'>{action}</h1>
 

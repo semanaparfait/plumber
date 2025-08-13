@@ -16,11 +16,14 @@ import path from 'path';
 dotenv.config();
 const app = express();
 const { Pool } = pg;  
+app.use(cookieParser()); // Middleware to parse cookies
 
 app.use(bodyParser.json())
 app.use('/uploads', express.static('uploads'));
-app.use(cookieParser()); // Middleware to parse cookies
 const isNeon = process.env.DATABASE_URL?.includes("neon.tech");
+const router = express.Router();
+app.use(router);
+
 app.use(cors({
   origin: 'http://localhost:5173',
   credentials: true,
@@ -57,7 +60,7 @@ function authenticateToken(req, res, next) {
     req.user = decoded; // You can access user info in req.user in the route
     next();
   } catch (err) {
-      res.status(500).json({ error: err.message });
+      // res.status(500).json({ error: err.message });
     res.status(403).json({ message: 'Invalid or expired token' });
   }
 }
@@ -135,7 +138,12 @@ app.post('/api/login', async (req, res) => {
       expiresIn: '1h',
     });
 
-    res.cookie('session_token', token, { httpOnly: true, maxAge: 3600000 });
+res.cookie('session_token', token, {
+  httpOnly: true,
+  maxAge: 3600000, // 1 hour
+  sameSite: 'lax', // REQUIRED for cross-site
+  secure: false     // keep false for local HTTP, true for HTTPS in prod
+});
     res.json({ 
         message: 'Login successful' ,
         is_admin: user.is_admin
@@ -157,46 +165,6 @@ app.get('/api/admin/users', async (req, res) => {
   } catch (err) {
     console.error('Error fetching users:', err);
     res.status(500).json({ message: 'Server error fetching users' });
-  }
-});
-
-// inserting categories
-const storage = multer.diskStorage({
-  destination: "./uploads/categories",
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
-  }
-});
-const upload = multer({ storage });
-app.post("/api/categories", upload.single("image"), async (req, res) => {
-  const { name } = req.body;
-
-  if (!name || !req.file) {
-    return res.status(400).json({ error: "Missing category name or image file" });
-  }
-
-  const imagePath = `/uploads/categories/${req.file.filename}`;
-
-  try {
-await pool.query(
-  "INSERT INTO categories (category_name, category_icon) VALUES ($1, $2)",
-  [name, imagePath]
-);
-    res.status(201).json({ message: "Category saved" });
-  } catch (err) {
-    console.error("Database error:", err);
-    res.status(500).json({ error: "Database error" });
-  }
-});
-
-// selecting categories
-app.get("/api/categories", async (req, res) => {
-  try {
-    const result = await pool.query("SELECT * FROM categories");
-    res.status(200).json(result.rows);
-  } catch (err) {
-    console.error("Error fetching categories:", err);
-    res.status(500).json({ error: "Database error" });
   }
 });
 
@@ -231,6 +199,246 @@ app.get('/api/contactus', async (req, res) => {
     res.status(500).json({ message: 'Server error fetching messages' });
   }
 });
+
+// inserting subscribers for news letter
+app.post('/api/subscribe', async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ message: 'Email is required' });
+  }
+
+  try {
+    await pool.query(
+      'INSERT INTO news_letter (email) VALUES ($1)',
+      [email]
+    );
+    res.status(201).json({ message: 'Subscription successful' });
+  } catch (err) {
+    console.error('Error inserting subscriber:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+// Get all subscribers
+app.get('/api/subscribe', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM news_letter');
+    res.status(200).json(result.rows);
+  } catch (err) {
+    console.error('Error fetching subscribers:', err);
+    res.status(500).json({ message: 'Server error fetching subscribers' });
+  }
+});
+
+// insering category
+
+
+// Multer setup
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    if (!fs.existsSync("uploads")) fs.mkdirSync("uploads");
+    cb(null, "uploads/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
+
+const upload = multer({ storage });
+
+// POST /api/categories
+app.post("/api/categories", upload.single("category_image"), async (req, res) => {
+  try {
+    const { category_name } = req.body;
+    if (!category_name) return res.status(400).json({ error: "Category name is required" });
+
+    const categoryImage = req.file ? req.file.filename : null;
+
+    const result = await pool.query(
+      `INSERT INTO categories (category_name, category_image)
+       VALUES ($1, $2) RETURNING *`,
+      [category_name, categoryImage]
+    );
+
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error("Error uploading category:", err);
+    res.status(500).json({ error: "Failed to upload category" });
+  }
+});
+
+// GET /api/categories
+app.get("/api/categories", async (req, res) => {
+  try {
+    const result = await pool.query(
+      "SELECT category_id, category_name, category_image FROM categories ORDER BY category_name"
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error("Error fetching categories:", err);
+    res.status(500).json({ error: "Failed to fetch categories" });
+  }
+});
+
+
+// upload products
+
+
+
+// Set storage for uploaded files
+const storageproduct = multer.diskStorage({
+  destination: (req, file, cb) => {
+    if (!fs.existsSync("uploads")) fs.mkdirSync("uploads");
+    cb(null, "uploads/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
+
+const uploadproduct = multer({ storage: storageproduct });
+// POST /api/products
+app.post("/api/products", uploadproduct.single("product_image1") , async (req, res) => {
+  try {
+    const {
+      product_name,
+      product_description,
+      product_newprice,
+      product_oldprice,
+      category_id
+
+    } = req.body;
+
+    if (!product_name || !product_description || !product_newprice  || !category_id) {
+      return res.status(400).json({ error: "Please provide all required fields" });
+    }
+    const productImage1 = req.file ? req.file.filename : null;
+
+    const result = await pool.query(
+      `INSERT INTO products 
+        (product_name, product_description, product_newprice, product_oldprice, category_id, product_image1)
+       VALUES ($1, $2, $3, $4, $5, $6)
+       RETURNING *`,
+      [
+        product_name,
+        product_description,
+        product_newprice,
+        product_oldprice,
+        category_id,
+        productImage1
+      ]
+    );
+
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error("Error uploading product:", err);
+    res.status(500).json({ error: "Failed to upload product" });
+  }
+});
+
+
+// GET /api/product
+app.get("/api/products", async (req, res) => {
+  try {
+    const result = await pool.query(
+      "SELECT * FROM products"
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error("Error fetching categories:", err);
+    res.status(500).json({ error: "Failed to fetch categories" });
+  }
+});
+
+//insering to cart
+// Add to cart
+app.post("/api/cart", authenticateToken, async (req, res) => {
+  const { product_id, quantity } = req.body;
+  const user_id = req.user.id;
+
+  try {
+    // Check if product already in cart for this user
+    const existing = await pool.query(
+      "SELECT * FROM cart WHERE user_id = $1 AND product_id = $2",
+      [user_id, product_id]
+    );
+
+    if (existing.rows.length > 0) {
+      // Product exists → increment quantity
+      const newQty = existing.rows[0].quantity + quantity;
+      const updated = await pool.query(
+        "UPDATE cart SET quantity = $1 WHERE user_id = $2 AND product_id = $3 RETURNING *",
+        [newQty, user_id, product_id]
+      );
+      res.json({ message: "Cart updated", cart: updated.rows[0] });
+    } else {
+      // Product not in cart → insert new row
+      const result = await pool.query(
+        "INSERT INTO cart (user_id, product_id, quantity) VALUES ($1, $2, $3) RETURNING *",
+        [user_id, product_id, quantity]
+      );
+      res.json({ message: "Product added to cart", cart: result.rows[0] });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to add to cart" });
+  }
+});
+
+
+ // get the cart items for the user
+ // Get cart items
+app.get("/api/cart", authenticateToken, async (req, res) => {
+  const user_id = req.user.id; // from JWT middleware
+
+  try {
+    const result = await pool.query(
+      `SELECT 
+         c.cart_id,
+         c.product_id,
+         c.quantity,
+         p.product_name,
+         p.product_newprice,
+         p.product_image1
+       FROM cart c
+       JOIN products p 
+         ON p.product_id = c.product_id
+       WHERE c.user_id = $1
+       ORDER BY c.cart_id DESC`,
+      [user_id]
+    );
+
+    res.json(result.rows); // returns an array
+  } catch (error) {
+    console.error("Error fetching cart:", error);
+    res.status(500).json({ error: "Error fetching cart" });
+  }
+});
+// delete the cart
+app.delete("/api/cart/:id", authenticateToken, async (req, res) => {
+  const { id } = req.params;
+  const user_id = req.user.id;
+
+  try {
+    const result = await pool.query(
+      `DELETE FROM cart 
+       WHERE cart_id = $1 AND user_id = $2
+       RETURNING *`,
+      [id, user_id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: "Item not found or unauthorized" });
+    }
+
+    res.json({ message: "Item removed from cart" });
+  } catch (error) {
+    console.error("Error removing item from cart:", error);
+    res.status(500).json({ error: "Error removing item" });
+  }
+});
+
+
 
 // Start server
 const PORT = process.env.PORT || 5000;

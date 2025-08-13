@@ -1,0 +1,63 @@
+.the-h1,
+.process,
+.why-choose-us,
+.question-title,
+.shop-heading,
+.cart-heading,
+.nothingin-cart,
+.brands,
+.shop-overlay{
+      font-family: "Rancho", cursive;
+  font-weight: 700;
+  font-style: normal;
+}
+.highlighted-expert {
+  color:  #0077be; /* teal color */
+  position: relative;
+  font-weight: 600; /* or bold */
+  padding: 0 0.3rem;
+  border: 2px solid  #0077be;
+  display: inline-block;
+}
+
+/* Add the corner lines with pseudo elements */
+.highlighted-expert::before,
+.highlighted-expert::after {
+  content: "";
+  position: absolute;
+  border-color:  #0077be;
+  border-style: solid;
+}
+
+.highlighted-expert::before {
+  top: -6px;
+  left: -6px;
+  width: 10px;
+  height: 10px;
+  border-width: 2px 2px 0 0;
+}
+
+.highlighted-expert::after {
+  bottom: -6px;
+  right: -6px;
+  width: 10px;
+  height: 10px;
+  border-width: 0 0 2px 2px;
+}
+.stats-section {
+  /* background-color: #111827; dark gray like screenshot */
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.stat {
+  text-align: center;
+  padding: 0 30px;
+}
+
+
+
+

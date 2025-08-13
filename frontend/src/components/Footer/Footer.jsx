@@ -1,5 +1,6 @@
 import React from 'react'
 import logo from '../../assets/logo/logo.jpg'
+import { Link } from 'react-router-dom';
 
 function Footer() {
   const date = new Date();
@@ -14,7 +15,7 @@ const year = date.getFullYear();
                 <h1 className='font-black text-[20px]'>Einstein Ltd</h1>
             </div><br />
             <p className=''>Lorem ipsum dolor sit amet,  <br /> consectetur adipisicing elit.  <br />In dolores, nihil ex expedita </p><br />
-            <div className=' flex justify-evenly text-[blue]'>
+            <div className=' flex justify-evenly text-[#0077be]'>
                 <i className="fa-brands fa-facebook-f border rounded-[7px]" style={{padding:'5px 9px'}}></i>
                 <i className="fa-brands fa-twitter border rounded-[7px]" style={{padding:'5px 9px'}}></i>
                 <i className="fa-brands fa-instagram border rounded-[7px]" style={{padding:'5px 9px'}}></i>
@@ -26,11 +27,19 @@ const year = date.getFullYear();
         <div >
             <h3 className='font-bold'>Menu</h3><br />
             <ul>
+                <Link to={`/`}>
                 <li>Home</li>
+                </Link>
                 <li>About</li>
+                <Link to={`/services`}>
                 <li>Services</li>
+                </Link>
+                <Link to={`/contactus`}>
                 <li>Contact</li>
+                </Link>
+                <Link to={`/shop`}>
                 <li>Shop</li>
+                </Link>
             </ul>
         </div>
         <div >
@@ -50,11 +59,12 @@ const year = date.getFullYear();
             className='border h-[2.7rem] rounded-[12px]'
             style={{paddingLeft:'5px'}}
             />
-            <button className='bg-[green] text-[white] rounded-[10px]' style={{marginTop:'2rem', padding:'10px 20px'}}>Subscribe</button>
+            <button className='bg-[#0077be] text-[white] rounded-[10px]' style={{marginTop:'2rem', padding:'10px 20px'}}>Subscribe</button>
         </div>
     </div><br />
-    <footer className='text-center' style={{borderTop:'2px solid black'}}>
-        Copyright &copy; {year} Einstein Ltd | Designed by <span className='text-[blue] font-bold'>SEMANA</span> - Powered by  <span className='text-[blue] font-bold'>SEMANA</span>
+    <hr />
+    <footer className='text-center'>
+        Copyright &copy; {year} Einstein Ltd | Designed by <span className='text-[#0077be] font-bold'>SEMANA</span> - Powered by  <span className='text-[#0077be] font-bold'>SEMANA</span>
     </footer>
             </div>
   )

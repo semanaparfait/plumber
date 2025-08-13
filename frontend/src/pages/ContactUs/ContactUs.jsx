@@ -113,8 +113,8 @@ function ContactUs() {
 
       <Navbar />
       <div
-        className="w-full h-[100vh] md:h-[70vh] flex items-center justify-center flex-col gap-6"
-        style={{ background: "rgb(207, 225, 229)" }}
+        className="w-full h-[100vh] md:h-[70vh] flex items-center justify-center flex-col gap-6 bg-[#0077be]"
+        // style={{ background: "rgb(207, 225, 229)" }}
       >
         <img
           src={arrow}
@@ -122,10 +122,10 @@ function ContactUs() {
           className="w-[7rem] absolute top-[10%] left-[10%]"
         />
         <div className="relative flex flex-col items-center gap-4">
-          <h1 className="font-black text-5xl md:text-7xl text-center">
+          <h1 className="font-black text-5xl md:text-7xl text-center text-white">
             Contact Us
           </h1>
-          <p className=" text-center w-full md:w-[50%]">
+          <p className=" text-center w-full md:w-[50%] text-white">
             Need a reliable plumber you can trust? We fix leaks, unclog drains,
             and install systems fast. Call now for expert service, honest
             pricing, and lasting results for your home or business.
