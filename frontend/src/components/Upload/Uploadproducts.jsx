@@ -1,10 +1,11 @@
 import React, {useState, useEffect} from 'react'
 
 function Uploadproducts() {
+  const API_URL = process.env.REACT_APP_API_URL;
     //   fetching categories
       useEffect(() => {
         // Fetch categories from backend
-        fetch("https://einstein-plumbers1.onrender.com/api/categories")
+        fetch(`${API_URL}/api/categories`)
           .then((res) => res.json())
           .then((data) => setCategories(data))
           .catch((err) => console.error(err));
@@ -29,7 +30,7 @@ function Uploadproducts() {
         }
     
         try {
-          const res = await fetch("https://einstein-plumbers1.onrender.com/api/categories", {
+          const res = await fetch(`${API_URL}/api/categories`, {
             method: "POST",
             body: formData,
           });
@@ -72,7 +73,7 @@ function Uploadproducts() {
     }
 
     try {
-      const res = await fetch("https://einstein-plumbers1.onrender.com/api/products", {
+      const res = await fetch(`${API_URL}/api/products`, {
         method: "POST",
         body: formData,
       });

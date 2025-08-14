@@ -7,13 +7,14 @@ import Tables from '../../components/tables/Tables'
 import Producttable from '../../components/proucttable/Producttable'
 
 function Adminpage() {
+    const API_URL = process.env.REACT_APP_API_URL;
     const [activetab, setActivetab] = useState("dashboard")
 
 
 //   fetching for contact us
     const [contactUsMessages, setContactUsMessages] = useState([]);
     useEffect(() => {
-        fetch('https://einstein-plumbers1.onrender.com/api/contactus')
+        fetch(`${API_URL}/api/contactus`)
         .then(res => res.json())
         .then(data => setContactUsMessages(data))
         .catch(err => console.error('Error fetching contact us messages:', err));
@@ -21,7 +22,7 @@ function Adminpage() {
 //   fetching news letter
     const [newsLetterSubscribers, setNewsLetterSubscribers] = useState([]);
     useEffect(() => {
-        fetch('https://einstein-plumbers1.onrender.com/api/subscribe')
+        fetch(`${API_URL}/api/subscribe`)
         .then(res => res.json())  
         .then(data => setNewsLetterSubscribers(data))
         .catch(err => console.error('Error fetching news letter subscribers:', err));

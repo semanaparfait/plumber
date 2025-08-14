@@ -5,10 +5,11 @@ import { Link } from 'react-router-dom';
 
 
 function Cart() {
+      const API_URL = process.env.REACT_APP_API_URL;
   const [cartItems, setCartItems] = useState([]);
 
 useEffect(() => {
-  fetch('https://einstein-plumbers1.onrender.com/api/cart', {
+  fetch(`${API_URL}/api/cart`, {
     method: 'GET',
     credentials: 'include',
   })
@@ -29,7 +30,7 @@ const removeFromCart = async (cartId) => {
   if (!cartId) return; // safeguard
 
   try {
-    const res = await fetch(`https://einstein-plumbers1.onrender.com/api/cart/${cartId}`, {
+    const res = await fetch(`${API_URL}/api/cart/${cartId}`, {
       method: "DELETE",
       credentials: "include",
     });
@@ -90,7 +91,7 @@ const totalPrice = cartItems.reduce((sum, item) => {
           >
             <div className='flex flex-wrap  items-center gap-0 md:gap-4'>
             <img 
-            src={`https://einstein-plumbers1.onrender.com/uploads/${item.product_image1}`} 
+            src={`${API_URL}/uploads/${item.product_image1}`} 
             // src={item.product_image1} 
             alt={item.name} className="w-16 h-16 object-cover mx-auto" />
             <p className='font-semibold'>{item.product_name}</p>

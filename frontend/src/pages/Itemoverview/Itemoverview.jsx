@@ -4,13 +4,14 @@ import Footer from '../../components/Footer/Footer';
 import Navbar from '../../components/Navbar/Navbar';
 
 function Itemoverview() {
+    const API_URL = process.env.REACT_APP_API_URL;
   const { productid } = useParams();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [count, setCount] = useState(1);
 
 useEffect(() => {
-  fetch("https://einstein-plumbers1.onrender.com/api/products")
+  fetch(`${API_URL}/api/products`)
     .then((res) => res.json())
     .then((data) => {
       setProducts(data);
@@ -45,7 +46,7 @@ useEffect(() => {
 
 // const handleAddToCart = async (productId) => {
 //   try {
-//     const res = await fetch("https://einstein-plumbers1.onrender.com/api/cart", {
+//     const res = await fetch(`${API_URL}/api/cart`, {
 //       method: "POST",
 //       headers: { "Content-Type": "application/json" },
 //       credentials: "include", // ✅ sends cookies
@@ -62,7 +63,7 @@ useEffect(() => {
 
 const handleAddToCart = async (productId) => {
   try {
-    const res = await fetch("https://einstein-plumbers1.onrender.com/api/cart", {
+    const res = await fetch(`${API_URL}/api/cart`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -89,7 +90,7 @@ const handleAddToCart = async (productId) => {
           <div>
             
         <img 
-          src={`https://einstein-plumbers1.onrender.com/uploads/${item.product_image1}`} 
+          src={`${API_URL}/uploads/${item.product_image1}`} 
           alt={item.product_name} 
           className='w-[90%] md:w-[17rem] h-[23rem] rounded-3xl object-cover'
         />

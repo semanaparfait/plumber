@@ -7,6 +7,7 @@ import logo from '../../assets/logo/logo.jpg';
 import tools from '../../assets/hero/tools.jpg';
 
 function Shop() {
+    const API_URL = process.env.REACT_APP_API_URL;
   const [selectedCategory, setSelectedCategory] = useState("");
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
@@ -16,7 +17,7 @@ function Shop() {
 
   // Fetch categories once
   useEffect(() => {
-    fetch("https://einstein-plumbers1.onrender.com/api/categories")
+    fetch(`${API_URL}/api/categories`)
       .then(res => res.json())
       .then(data => setCategories(data))
       .catch(err => console.error(err));
@@ -24,7 +25,7 @@ function Shop() {
 
   // Fetch products once
   useEffect(() => {
-    fetch("https://einstein-plumbers1.onrender.com/api/products")
+    fetch(`${API_URL}/api/products`)
       .then(res => res.json())
       .then(data => setProducts(data))
       .catch(err => console.error(err));
@@ -132,7 +133,7 @@ function Shop() {
               style={{ padding: "5px" }}
               onClick={() => setSelectedCategory(cat.category_name)}
             >
-              <img src={`https://einstein-plumbers1.onrender.com/uploads/${cat.category_image}`}
+              <img src={`${API_URL}/uploads/${cat.category_image}`}
                 alt={cat.category_name} className="w-[4rem]" />
               <p className="text-center font-semibold text-[15px]">{cat.category_name}</p>
             </div>
@@ -151,7 +152,7 @@ function Shop() {
             <Link key={product.product_id} to={`/itemoverview/${product.product_id}`}>
               <div>
                 <img
-                  src={`https://einstein-plumbers1.onrender.com/uploads/${product.product_image1}`}
+                  src={`${API_URL}/uploads/${product.product_image1}`}
                   alt={product.product_name}
                   className='w-full object-cover rounded-tl-[20px] rounded-tr-[20px] h-[15rem]'
                 />

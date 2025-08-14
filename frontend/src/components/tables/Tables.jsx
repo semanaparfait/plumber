@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
 function Tables() {
+  const API_URL = process.env.REACT_APP_API_URL;
   const [activetab, setActivetab] = useState("users");
 
   // Users
   const [users, setUsers] = useState([]);
   useEffect(() => {
-    fetch('https://einstein-plumbers1.onrender.com/api/admin/users')
+    fetch(`${API_URL}/api/admin/users`)
       .then(res => res.json())
       .then(data => setUsers(data))
       .catch(err => console.error('Error fetching users:', err));
@@ -15,7 +16,7 @@ function Tables() {
   // Admins
   const [admin, setAdmin] = useState([]);
   useEffect(() => {
-    fetch('https://einstein-plumbers1.onrender.com/api/admin/admins')
+    fetch(`${API_URL}/api/admin/admins`)
       .then(res => res.json())
       .then(data => setAdmin(data))
       .catch(err => console.error('Error fetching admins:', err));
@@ -26,7 +27,7 @@ function Tables() {
     const newStatus = value === 'admin';
 
     try {
-      const response = await fetch(`https://einstein-plumbers1.onrender.com/api/users/${userId}/status`, {
+      const response = await fetch(`${API_URL}/api/users/${userId}/status`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ is_admin: newStatus }),
@@ -47,7 +48,7 @@ function Tables() {
 // deleting user
 const handleDelete = async (userId) => {
   try {
-    const response = await fetch(`https://einstein-plumbers1.onrender.com/api/users/${userId}`, {
+    const response = await fetch(`${API_URL}/api/users/${userId}`, {
       method: 'DELETE',
     });
 
