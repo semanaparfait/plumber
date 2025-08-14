@@ -61,7 +61,7 @@ function Shop() {
 <div style={{padding:'10px'}}>
       <div className='flex justify-around items-center border-gray-300 border'>
         <div>
-            <Link to={`/home`}>
+            <Link to={`/`}>
             <img src={logo} alt="logo" className='w-[5rem]'/>
             </Link>
         </div>

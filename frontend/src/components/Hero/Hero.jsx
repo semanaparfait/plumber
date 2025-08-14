@@ -57,20 +57,20 @@ function Hero() {
                         Get Started <i className="fa-solid fa-chevron-right"></i>
                     </button>
                     </div>
-                    <div className='absolute bottom-[6%] left-[3%]  flex gap-4 items-center text-white py-4 z-10 hidden'>
+                    <div className='absolute bottom-[6%] left-[3%]  hidden gap-4 items-center text-white py-4 z-10 md:flex '>
                         <section className="stats-section">
                         <div className="stat">
-                            <span className="font-bold block text-[2rem]">13+</span>
+                            <span className="font-bold block text-[0.6rem] md:text-[2rem]">13+</span>
                             <span className="text-[0.9rem] text-[#d1d5bd]">Years Of Experience</span>
                         </div>
                         <div className="w-[2px] h-[100px] bg-[#0062ec]"></div>
                         <div className="stat">
-                            <span className="font-bold block text-[2rem]">53K+</span>
+                            <span className="font-bold block [0.6rem] md:text-[2rem]">53K+</span>
                             <span className="text-[0.9rem] text-[#d1d5bd]">Active Customers Rate</span>
                         </div>
                         <div className="w-[2px] h-[100px] bg-[#0062ec]"></div>
                         <div className="stat">
-                            <span className="font-bold block text-[2rem]">1M+</span>
+                            <span className="font-bold block [0.6rem] md:text-[2rem]">1M+</span>
                             <span className="text-[0.9rem] text-[#d1d5bd]">Customer Satisfaction Rate</span>
                         </div>
                         </section>
@@ -110,7 +110,7 @@ function Hero() {
             </div>
 
 
-            <div>
+            <div className='hidden md:block'>
                 <img src={arow} alt="arrow" className='w-[5rem]' />
             </div>
             <div className="flex flex-col items-center max-w-xs mx-auto">
@@ -136,7 +136,7 @@ function Hero() {
             </div>
 
 
-            <div>
+            <div className='hidden md:block'>
                 <img src={arow} alt="arrow" className='w-[5rem]' />
             </div>
 
@@ -163,7 +163,7 @@ function Hero() {
             </div>
 
 
-            <div>
+            <div className='hidden md:block'>
                 <img src={arow} alt="arrow" className='w-[5rem]' />
             </div>
 

@@ -156,8 +156,8 @@ function Uploadproducts() {
 
         </div>
           </div><br /><br /><hr />
-        <div className="upload-new-category">
-            <h1>Upload  category</h1>
+        <div className="upload-new-category"><br />
+            <h1 className='text-center font-bold text-3xl'>Upload  category</h1><br />
             <form onSubmit={handleUpload} className='flex flex-col gap-4 items-center justify-center'>
                 <input
                 type="file"
@@ -171,7 +171,7 @@ function Uploadproducts() {
             placeholder='category name'
             className='outline-none border-2 border-gray-500 rounded-[10px] h-[2.5rem] placeholder-black '
             style={{paddingLeft:'8px'}}/>
-                <button type='submit' className='bg-cyan-500 h-[2.4rem] rounded-2xl'>Upload New product</button>
+                <button type='submit' className='bg-cyan-500 h-[2.4rem] rounded-2xl'style={{padding:'10px 20px'}}>Upload New product</button>
 
             </form>
         </div>

@@ -28,28 +28,28 @@ const year = date.getFullYear();
             <h3 className='font-bold'>Menu</h3><br />
             <ul>
                 <Link to={`/`}>
-                <li>Home</li>
+                <li><i class="fa-solid fa-house-chimney"></i> Home</li>
                 </Link>
-                <li>About</li>
+                <li><i class="fa-regular fa-address-card"></i> About</li>
                 <Link to={`/services`}>
-                <li>Services</li>
+                <li><i class="fa-solid fa-house-chimney"></i> Services</li>
                 </Link>
                 <Link to={`/contactus`}>
-                <li>Contact</li>
+                <li><i class="fa-solid fa-phone-volume"></i> Contact</li>
                 </Link>
                 <Link to={`/shop`}>
-                <li>Shop</li>
+                <li><i class="fa-solid fa-cart-shopping"></i> Shop</li>
                 </Link>
             </ul>
         </div>
         <div >
             <h3 className='font-bold'>Address</h3><br />
             <ul>
-                <li>+250 782 171 515</li>
-                <li>+250 782 171 515</li>
-                <li>KG 33 Avenue</li>
-                <li>Copcom Business Center</li>
-                <li>Door No. CR046</li>
+                <li><i class="fa-solid fa-phone-volume"></i> +250 782 171 515</li>
+                <li><i class="fa-solid fa-phone-volume"></i> +250 782 171 515</li>
+                <li><i class="fa-solid fa-location-dot"></i> KG 33 Avenue</li>
+                <li><i class="fa-solid fa-location-dot"></i> Copcom Business Center</li>
+                <li><i class="fa-solid fa-door-open"></i> Door No. CR046</li>
             </ul>
         </div>
         <div className='flex flex-col'>
@@ -62,10 +62,10 @@ const year = date.getFullYear();
             <button className='bg-[#0077be] text-[white] rounded-[10px]' style={{marginTop:'2rem', padding:'10px 20px'}}>Subscribe</button>
         </div>
     </div><br />
-    <hr />
+    <hr /><br />
     <footer className='text-center'>
         Copyright &copy; {year} Einstein Ltd | Designed by <span className='text-[#0077be] font-bold'>SEMANA</span> - Powered by  <span className='text-[#0077be] font-bold'>SEMANA</span>
-    </footer>
+    </footer><br />
             </div>
   )
 }

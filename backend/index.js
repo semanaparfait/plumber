@@ -159,7 +159,7 @@ res.cookie('session_token', token, {
 app.get('/api/admin/users', async (req, res) => {
   try {
     const result = await pool.query(
-      'SELECT id, username, phonenumber, password, created_at , is_admin FROM users'
+      'SELECT id, username, phonenumber, password, created_at , is_admin FROM users WHERE is_admin = false'
     );
     res.status(200).json(result.rows);
   } catch (err) {
@@ -167,6 +167,64 @@ app.get('/api/admin/users', async (req, res) => {
     res.status(500).json({ message: 'Server error fetching users' });
   }
 });
+
+// fetching only admins
+app.get('/api/admin/admins', async (req, res) => {
+  try {
+    const result = await pool.query(
+      'SELECT id, username, phonenumber, password, created_at , is_admin FROM users WHERE is_admin = true'
+    );
+    res.status(200).json(result.rows);
+  } catch (err) {
+    console.error('Error fetching users:', err);
+    res.status(500).json({ message: 'Server error fetching users' });
+  }
+});
+
+// PUT /api/users/:id/status
+app.put('/api/users/:id/status', async (req, res) => {
+  const { id } = req.params;
+  const { is_admin } = req.body;
+
+  try {
+    const result = await pool.query(
+      'UPDATE users SET is_admin = $1 WHERE id = $2',
+      [is_admin, id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({ message: 'Status updated successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// admin deleting------
+// DELETE /api/users/:id
+app.delete('/api/users/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const result = await pool.query(
+      'DELETE FROM users WHERE id = $1',
+      [id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({ message: 'User deleted successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error deleting user' });
+  }
+});
+
 
 // insert contact us endpoint
 app.post('/api/contactus', async (req, res) => {
@@ -349,6 +407,33 @@ app.get("/api/products", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch categories" });
   }
 });
+// ------------deleting product-------------
+app.delete('/api/products/:id', async (req, res) => {
+  const { id } = req.params; // this is the product_id from the URL
+
+  if (!id) {
+    return res.status(400).json({ message: 'Product ID is required' });
+  }
+
+  try {
+    const result = await pool.query(
+      'DELETE FROM products WHERE product_id = $1 RETURNING *',
+      [id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    res.status(200).json({ message: 'Product deleted', product: result.rows[0] });
+  } catch (err) {
+    console.error('Error deleting product:', err);
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+});
+
+
+
 
 //insering to cart
 // Add to cart

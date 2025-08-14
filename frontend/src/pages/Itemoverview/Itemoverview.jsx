@@ -103,10 +103,11 @@ const handleAddToCart = async (productId) => {
             <p className='bg-amber-500 w-fit rounded-2xl' style={{ padding: '4px 20px' }}>
               Free shipping
             </p>
+            <h1>{item.product_oldprice}</h1>
 
             <div>
               <h1 className='font-black text-3xl text-amber-900'>
-                 {item.product_newprice * count } RWF
+                 {(item.product_newprice * count).toLocaleString() } RWF
               </h1>
             </div>
 

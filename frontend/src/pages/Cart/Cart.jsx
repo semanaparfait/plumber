@@ -72,7 +72,7 @@ const totalPrice = cartItems.reduce((sum, item) => {
       <div className="cart px-8 py-6 " >
         <h1 className='cart-heading text-center font-black text-4xl'>MY CART PRODUCT FROM <br /><span className='text-[#0077be]'>EINSTEIN PLUMBERS</span></h1><br />
         {/* Render table header */}
-        <div className="cart-items-title hidden md:grid grid-cols-5 text-center font-semibold pb-2 ">
+        <div className="cart-items-title hidden md:grid grid-cols-6 text-center font-semibold pb-2 ">
           <p>Items</p>
           <p>Price</p>
           <p>Quantity</p>
@@ -85,7 +85,7 @@ const totalPrice = cartItems.reduce((sum, item) => {
         {/* Render cart rows from backend */}
         {cartItems.map((item) => (
           
-          <div key={item.id} className="grid grid-cols-4 md:grid-cols-5  items-center justify-between text-center border-b border-b-gray-300 "
+          <div key={item.id} className="grid grid-cols-4 md:grid-cols-6  items-center justify-between text-center border-b border-b-gray-300 "
           style={{padding:'10px 2rem'}}
           >
             <div className='flex flex-wrap  items-center gap-0 md:gap-4'>
@@ -99,6 +99,7 @@ const totalPrice = cartItems.reduce((sum, item) => {
             <p className='hidden md:block'> {Number(item.product_newprice).toLocaleString()}RWF</p>
             <p>{item.quantity}</p>
             <p className='font-bold'> {(Number(item.product_newprice) * Number(item.quantity)).toLocaleString()} RWF</p>
+            <p className='text-green-500 font-black'>{item.cart_statust}</p>
             <button className="text-red-500" onClick={() => removeFromCart(item.cart_id)}>X</button>
           </div>
         ))}

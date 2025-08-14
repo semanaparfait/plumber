@@ -3,18 +3,12 @@ import './Adminpage.css'
 import { Link } from 'react-router-dom'
 import logo  from '../../assets/logo/logo.jpg'
 import Uploadproducts from '../../components/Upload/Uploadproducts'
+import Tables from '../../components/tables/Tables'
+import Producttable from '../../components/proucttable/Producttable'
 
 function Adminpage() {
     const [activetab, setActivetab] = useState("dashboard")
-    const [users, setUsers] = useState([]);
 
-  useEffect(() => {
-    fetch('http://localhost:5000/api/admin/users')
-    // fetch('https://new-movie-app.onrender.com/api/admin/users')
-      .then(res => res.json())
-      .then(data => setUsers(data))
-      .catch(err => console.error('Error fetching users:', err));
-  }, []);
 
 //   fetching for contact us
     const [contactUsMessages, setContactUsMessages] = useState([]);
@@ -46,7 +40,7 @@ function Adminpage() {
             </div>
                 <ul className='gap-5 cursor-pointer hidden md:flex'>
                     <li onClick={()=>setActivetab("dashboard")}>Dashboard</li>
-                    <li onClick={()=>setActivetab("users")}>Users</li>
+                    <li onClick={()=>setActivetab("users")}>Accounts</li>
                     <li onClick={()=>setActivetab("product")}>Products</li>
                     <li onClick={()=>setActivetab("carts")}>carts</li>
                     <li onClick={()=>setActivetab("upload")}>Upload</li>
@@ -77,7 +71,7 @@ function Adminpage() {
                         </div>
                         <div className="stat-details">
                         <h3 className='text-[24px] text-[black] font-bold'>2,584</h3>
-                        <p className='text-[#777] text-[14px]'>Total Movies</p>
+                        <p className='text-[#777] text-[14px]'>Total products</p>
                         </div>
                     </div>
                     
@@ -117,34 +111,11 @@ function Adminpage() {
             )}
         {/* fetching users */}
         {activetab === 'users' && (
-
-        <div className="overflow-x-auto px-4 ">
-                <table className='recent-table w-full'>
-                <thead className='bg-gray-100'>
-                    <tr>
-                    <th>UserId</th>
-                    <th>Created_At</th>
-                    <th>Username</th>
-                    <th>Phonenumber</th>
-                    <th>Password</th>
-                    <th>Is_Admin</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {users.map(user => (
-                        <tr key={user.id} className='text-center'>
-                        <td>{user.id}</td>
-                        <td>{new Date(user.created_at).toLocaleString()}</td>
-                        <td>{user.username}</td>
-                        <td>{user.phonenumber}</td>
-                        <td>{user.password}</td>
-                        <td>{user.is_admin ? 'Admin' : 'User'}</td>
-                        </tr>
-                    ))}
-                    </tbody>
-                    {/* Add more rows as needed */}
-            </table>
-        </div>
+            <Tables/>
+        )}
+        {/* fetching products */}
+        {activetab === 'product' && (
+            <Producttable/>
         )}
         {/* add products */}
         {activetab === 'upload' && (
