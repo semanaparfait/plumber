@@ -10,7 +10,7 @@ function Itemoverview() {
   const [count, setCount] = useState(1);
 
 useEffect(() => {
-  fetch("https://plumber-1oic.onrender.com/api/products")
+  fetch("https://einstein-plumbers1.onrender.com/api/products")
     .then((res) => res.json())
     .then((data) => {
       setProducts(data);
@@ -45,7 +45,7 @@ useEffect(() => {
 
 // const handleAddToCart = async (productId) => {
 //   try {
-//     const res = await fetch("https://plumber-1oic.onrender.com/api/cart", {
+//     const res = await fetch("https://einstein-plumbers1.onrender.com/api/cart", {
 //       method: "POST",
 //       headers: { "Content-Type": "application/json" },
 //       credentials: "include", // ✅ sends cookies
@@ -62,7 +62,7 @@ useEffect(() => {
 
 const handleAddToCart = async (productId) => {
   try {
-    const res = await fetch("https://plumber-1oic.onrender.com/api/cart", {
+    const res = await fetch("https://einstein-plumbers1.onrender.com/api/cart", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -89,7 +89,7 @@ const handleAddToCart = async (productId) => {
           <div>
             
         <img 
-          src={`https://plumber-1oic.onrender.com/uploads/${item.product_image1}`} 
+          src={`https://einstein-plumbers1.onrender.com/uploads/${item.product_image1}`} 
           alt={item.product_name} 
           className='w-[90%] md:w-[17rem] h-[23rem] rounded-3xl object-cover'
         />

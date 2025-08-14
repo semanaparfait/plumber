@@ -6,7 +6,7 @@ function Tables() {
   // Users
   const [users, setUsers] = useState([]);
   useEffect(() => {
-    fetch('https://plumber-1oic.onrender.com/api/admin/users')
+    fetch('https://einstein-plumbers1.onrender.com/api/admin/users')
       .then(res => res.json())
       .then(data => setUsers(data))
       .catch(err => console.error('Error fetching users:', err));
@@ -15,7 +15,7 @@ function Tables() {
   // Admins
   const [admin, setAdmin] = useState([]);
   useEffect(() => {
-    fetch('https://plumber-1oic.onrender.com/api/admin/admins')
+    fetch('https://einstein-plumbers1.onrender.com/api/admin/admins')
       .then(res => res.json())
       .then(data => setAdmin(data))
       .catch(err => console.error('Error fetching admins:', err));
@@ -26,7 +26,7 @@ function Tables() {
     const newStatus = value === 'admin';
 
     try {
-      const response = await fetch(`https://plumber-1oic.onrender.com/api/users/${userId}/status`, {
+      const response = await fetch(`https://einstein-plumbers1.onrender.com/api/users/${userId}/status`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ is_admin: newStatus }),
@@ -47,7 +47,7 @@ function Tables() {
 // deleting user
 const handleDelete = async (userId) => {
   try {
-    const response = await fetch(`https://plumber-1oic.onrender.com/api/users/${userId}`, {
+    const response = await fetch(`https://einstein-plumbers1.onrender.com/api/users/${userId}`, {
       method: 'DELETE',
     });
 

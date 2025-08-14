@@ -13,7 +13,7 @@ function Adminpage() {
 //   fetching for contact us
     const [contactUsMessages, setContactUsMessages] = useState([]);
     useEffect(() => {
-        fetch('https://plumber-1oic.onrender.com/api/contactus')
+        fetch('https://einstein-plumbers1.onrender.com/api/contactus')
         .then(res => res.json())
         .then(data => setContactUsMessages(data))
         .catch(err => console.error('Error fetching contact us messages:', err));
@@ -21,7 +21,7 @@ function Adminpage() {
 //   fetching news letter
     const [newsLetterSubscribers, setNewsLetterSubscribers] = useState([]);
     useEffect(() => {
-        fetch('https://plumber-1oic.onrender.com/api/subscribe')
+        fetch('https://einstein-plumbers1.onrender.com/api/subscribe')
         .then(res => res.json())  
         .then(data => setNewsLetterSubscribers(data))
         .catch(err => console.error('Error fetching news letter subscribers:', err));

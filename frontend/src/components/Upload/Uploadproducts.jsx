@@ -4,7 +4,7 @@ function Uploadproducts() {
     //   fetching categories
       useEffect(() => {
         // Fetch categories from backend
-        fetch("https://plumber-1oic.onrender.com/api/categories")
+        fetch("https://einstein-plumbers1.onrender.com/api/categories")
           .then((res) => res.json())
           .then((data) => setCategories(data))
           .catch((err) => console.error(err));
@@ -29,7 +29,7 @@ function Uploadproducts() {
         }
     
         try {
-          const res = await fetch("https://plumber-1oic.onrender.com/api/categories", {
+          const res = await fetch("https://einstein-plumbers1.onrender.com/api/categories", {
             method: "POST",
             body: formData,
           });
@@ -72,7 +72,7 @@ function Uploadproducts() {
     }
 
     try {
-      const res = await fetch("https://plumber-1oic.onrender.com/api/products", {
+      const res = await fetch("https://einstein-plumbers1.onrender.com/api/products", {
         method: "POST",
         body: formData,
       });
