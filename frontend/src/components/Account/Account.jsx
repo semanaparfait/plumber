@@ -19,7 +19,7 @@ function Account({ onClose }) {
   if (action === "Sign up") {
     // Call backend signup API
     try {
-       const response = await fetch('http://localhost:5000/api/signup', {  
+       const response = await fetch('https://plumber-1oic.onrender.com/api/signup', {  
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, phonenumber, password }),
@@ -41,7 +41,7 @@ function Account({ onClose }) {
   } else if (action === "Log in") {
     // Call backend login API
     try {
-      const response = await fetch('http://localhost:5000/api/login', { 
+      const response = await fetch('https://plumber-1oic.onrender.com/api/login', { 
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
          credentials: 'include',

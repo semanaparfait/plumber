@@ -25,7 +25,7 @@ const router = express.Router();
 app.use(router);
 
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: 'https://einstein-plumbers.onrender.com',
   credentials: true,
 }));
 

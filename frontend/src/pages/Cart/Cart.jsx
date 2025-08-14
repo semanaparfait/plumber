@@ -8,7 +8,7 @@ function Cart() {
   const [cartItems, setCartItems] = useState([]);
 
 useEffect(() => {
-  fetch('http://localhost:5000/api/cart', {
+  fetch('https://plumber-1oic.onrender.com/api/cart', {
     method: 'GET',
     credentials: 'include',
   })
@@ -29,7 +29,7 @@ const removeFromCart = async (cartId) => {
   if (!cartId) return; // safeguard
 
   try {
-    const res = await fetch(`http://localhost:5000/api/cart/${cartId}`, {
+    const res = await fetch(`https://plumber-1oic.onrender.com/api/cart/${cartId}`, {
       method: "DELETE",
       credentials: "include",
     });
@@ -90,7 +90,7 @@ const totalPrice = cartItems.reduce((sum, item) => {
           >
             <div className='flex flex-wrap  items-center gap-0 md:gap-4'>
             <img 
-            src={`http://localhost:5000/uploads/${item.product_image1}`} 
+            src={`https://plumber-1oic.onrender.com/uploads/${item.product_image1}`} 
             // src={item.product_image1} 
             alt={item.name} className="w-16 h-16 object-cover mx-auto" />
             <p className='font-semibold'>{item.product_name}</p>

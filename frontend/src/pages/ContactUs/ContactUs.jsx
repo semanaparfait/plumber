@@ -25,7 +25,7 @@ function ContactUs() {
       email: newsemail,
     };
     try {
-      const response = await fetch("http://localhost:5000/api/subscribe", {
+      const response = await fetch("https://plumber-1oic.onrender.com/api/subscribe", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -62,7 +62,7 @@ function ContactUs() {
     };
 
     try {
-      const response = await fetch("http://localhost:5000/api/contactus", {
+      const response = await fetch("https://plumber-1oic.onrender.com/api/contactus", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

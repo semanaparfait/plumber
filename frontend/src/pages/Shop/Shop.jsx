@@ -14,7 +14,7 @@ function Shop() {
   const[categories, setCategories] = useState([])
   useEffect(() => {
     // Fetch categories from backend
-    fetch("http://localhost:5000/api/categories")
+    fetch("https://plumber-1oic.onrender.com/api/categories")
       .then((res) => res.json())
       .then((data) => setCategories(data))
       .catch((err) => console.error(err));
@@ -23,7 +23,7 @@ function Shop() {
   // fetching products
   const[products, setProducts] = useState([])
   useEffect (()=>{
-        fetch("http://localhost:5000/api/products")
+        fetch("https://plumber-1oic.onrender.com/api/products")
       .then((res) => res.json())
       .then((data) => setProducts(data))
       .catch((err) => console.error(err));
@@ -142,7 +142,7 @@ function Shop() {
     onClick={() => setSelectedCategory(onecategory.category_name)}
   >
     <img
-      src={`http://localhost:5000/uploads/${onecategory.category_image}`}
+      src={`https://plumber-1oic.onrender.com/uploads/${onecategory.category_image}`}
       alt={onecategory.category_name}
       className="w-[4rem]"
     />
@@ -163,7 +163,7 @@ function Shop() {
             {/* // <Link key={index} to={`/itemoverview/${item.id}`}> */}
         <div key={index} >
             <img
-             src={`http://localhost:5000/uploads/${product.product_image1}`}
+             src={`https://plumber-1oic.onrender.com/uploads/${product.product_image1}`}
              alt={product.product_name}
             className='w-full object-cover rounded-tl-[20px] rounded-tr-[20px] h-[15rem]'
             /><br/>
