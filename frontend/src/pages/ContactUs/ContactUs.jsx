@@ -7,7 +7,6 @@ import bg1 from "../../assets/services/bgservices.jpg";
 import arrow from "../../assets/contactus/arrow.png";
 
 function ContactUs() {
-  const API_URL = process.env.REACT_APP_API_URL;
   const [showNotification, setShowNotification] = useState(false);
   const [fillAllFields, setFillAllFields] = useState(false);
   const [name, setName] = useState("");
@@ -26,7 +25,7 @@ function ContactUs() {
       email: newsemail,
     };
     try {
-      const response = await fetch(`${API_URL}/api/subscribe`, {
+      const response = await fetch("https://einstein-plumbers1.onrender.com/api/subscribe", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -63,7 +62,7 @@ function ContactUs() {
     };
 
     try {
-      const response = await fetch(`${API_URL}/api/contactus`, {
+      const response = await fetch("https://einstein-plumbers1.onrender.com/api/contactus", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
