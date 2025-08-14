@@ -2,7 +2,6 @@ import React, {useState} from 'react'
 import { useNavigate } from 'react-router-dom';
 
 function Account({ onClose }) {
-  const API_URL = process.env.REACT_APP_API_URL;
 
   const [action, setAction] = useState("Sign up")
   const [username, setUsername] = useState("")
@@ -20,7 +19,7 @@ function Account({ onClose }) {
   if (action === "Sign up") {
     // Call backend signup API
     try {
-       const response = await fetch(`${API_URL}/api/signup`, {  
+       const response = await fetch('https://einstein-plumbers1.onrender.com/api/signup', {  
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, phonenumber, password }),
@@ -42,7 +41,7 @@ function Account({ onClose }) {
   } else if (action === "Log in") {
     // Call backend login API
     try {
-      const response = await fetch(`${API_URL}/api/login`, { 
+      const response = await fetch('https://einstein-plumbers1.onrender.com/api/login', { 
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
          credentials: 'include',

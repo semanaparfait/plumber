@@ -1,11 +1,11 @@
 import React,{useState,useEffect} from 'react'
 
 function Producttable() {
-  const API_URL = process.env.REACT_APP_API_URL;
+  
     const [activeproductcategory,setActiveproductcategory] = useState("products")
   const [products, setProducts] = useState([]);
   useEffect(() => {
-    fetch(`${API_URL}/api/products`)
+    fetch('https://einstein-plumbers1.onrender.com/api/products')
       .then(res => res.json())
       .then(data => setProducts(data))
       .catch(err => console.error('Error fetching product:', err));
@@ -17,7 +17,7 @@ const deleteProduct = async (productId) => {
   if (!window.confirm('Are you sure you want to delete this product?')) return;
 
   try {
-    const response = await fetch(`${API_URL}/api/products/${productId}`, {
+    const response = await fetch(`https://einstein-plumbers1.onrender.com/api/products/${productId}`, {
       method: 'DELETE',
     });
 
@@ -65,7 +65,7 @@ const deleteProduct = async (productId) => {
                         <td>{oneproduct.product_id}</td>
                         <td>
                            <img
-                            src={`${API_URL}/uploads/${oneproduct.product_image1}`}
+                            src={`https://einstein-plumbers1.onrender.com/uploads/${oneproduct.product_image1}`}
                             className='w-10'
                             alt={oneproduct.product_name}
                             />
