@@ -52,15 +52,28 @@ const pool = new Pool(
 // });
 // Middleware to verify JWT from cookie
 function authenticateToken(req, res, next) {
-  const token = req.cookies.session_token;
-  if (!token) return res.status(401).json({ message: 'Access denied. No token provided.' });
+  // 1. Check for a bearer token in the Authorization header.
+  const authHeader = req.headers['authorization'];
+  const bearerToken = authHeader && authHeader.split(' ')[1]; // Extracts the token after 'Bearer'
 
+  // 2. Check for a token in the cookies.
+  const cookieToken = req.cookies.session_token;
+
+  // 3. Determine which token to use.
+  const token = bearerToken || cookieToken;
+
+  // 4. If no token is found in either location, deny access.
+  if (!token) {
+    return res.status(401).json({ message: 'Access denied. No token provided.' });
+  }
+
+  // 5. Verify the token.
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // You can access user info in req.user in the route
+    req.user = decoded; // Attaches user info to the request object
     next();
   } catch (err) {
-      // res.status(500).json({ error: err.message });
+    // This catch block handles invalid, expired, or malformed tokens.
     res.status(403).json({ message: 'Invalid or expired token' });
   }
 }
@@ -137,12 +150,12 @@ app.post('/api/login', async (req, res) => {
     const token = jwt.sign({ id: user.id, phonenumber: user.phonenumber }, process.env.JWT_SECRET, {
       expiresIn: '1h',
     });
-
+const isProduction = process.env.NODE_ENV === 'production';
 res.cookie('session_token', token, {
   httpOnly: true,
   maxAge: 3600000, // 1 hour
-  sameSite: 'lax', // REQUIRED for cross-site
-  secure: false     // keep false for local HTTP, true for HTTPS in prod
+  sameSite: isProduction ? 'none' : 'lax', // 'none' for cross-site prod, 'lax' for local
+  secure: isProduction // must be true for 'none'
 });
     res.json({ 
         message: 'Login successful' ,
