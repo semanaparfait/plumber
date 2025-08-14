@@ -35,11 +35,12 @@ function Adminpage() {
 
   return (
     <div>
-        <nav className='flex items-center justify-between bg-amber-600 '>
+        <nav className='flex items-center justify-between bg-[#0077be] '>
             <div>
                 <img src={logo} alt="camapany logo"className='w-[6rem]' />
             </div>
-                <ul className='gap-5 cursor-pointer hidden md:flex'>
+                <ul className='gap-5 cursor-pointer flex'>
+                    {/* hidden md:flex */}
                     <li onClick={()=>setActivetab("dashboard")}>Dashboard</li>
                     <li onClick={()=>setActivetab("users")}>Accounts</li>
                     <li onClick={()=>setActivetab("product")}>Products</li>
