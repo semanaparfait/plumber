@@ -116,7 +116,7 @@ function Shop() {
           Find the Perfect Plumbing Solutions for Every Job <br />
           <span className='text-[#0077be]'>EINSTEIN PLUMBER ltd</span>
         </h1>
-      </div>
+      </div><br />
 
       {/* Categories */}
       <div className="category-products py-10">

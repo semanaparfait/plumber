@@ -1,31 +1,36 @@
-import React from 'react'
+import React, { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Home from './pages/Home/Home';
-import Services from './pages/Services/Services';
-import ContactUs from './pages/ContactUs/ContactUs';
-import Shop from './pages/Shop/Shop';
-import Itemoverview from './pages/Itemoverview/Itemoverview';
-import Cart from './pages/Cart/Cart';
-import Adminpage from './pages/Adminpage/Adminpage';
-import Order from './pages/Order/Order';
+import Loader from './components/Loader/Loader'; // your correct path
+
+
+// Lazy load pages
+const LazyHome = lazy(() => import('./pages/Home/Home'));
+const LazyServices = lazy(() => import('./pages/Services/Services'));
+const LazyContactUs = lazy(() => import('./pages/ContactUs/ContactUs'));
+const LazyShop = lazy(() => import('./pages/Shop/Shop'));
+const LazyItemoverview = lazy(() => import('./pages/Itemoverview/Itemoverview'));
+const LazyCart = lazy(() => import('./pages/Cart/Cart'));
+const LazyAdminpage = lazy(() => import('./pages/Adminpage/Adminpage'));
+const LazyOrder = lazy(() => import('./pages/Order/Order'));
+
 function App() {
   return (
     <BrowserRouter>
-<Routes>
-  <Route path="/" element={<Home />} />
-  <Route path='/services' element={<Services />} />
-  <Route path='/contactus' element={<ContactUs />} />
-  <Route path='/shop' element={<Shop />} />
-  <Route path='/itemoverview/:productid' element={<Itemoverview />} />
-  <Route path='/cart' element={<Cart />} />
-  <Route path='/admin' element={<Adminpage />} />
-  <Route path='/order' element={<Order />} />
-  </Routes>
-</BrowserRouter>
+      <Suspense fallback={<Loader />}>
+        <Routes>
 
-  )
-  
-
+          <Route path="/" element={<LazyHome />} />
+          <Route path="/services" element={<LazyServices />} />
+          <Route path="/contactus" element={<LazyContactUs />} />
+          <Route path="/shop" element={<LazyShop />} />
+          <Route path="/itemoverview/:productid" element={<LazyItemoverview />} />
+          <Route path="/cart" element={<LazyCart />} />
+          <Route path="/admin" element={<LazyAdminpage />} />
+          <Route path="/order" element={<LazyOrder />} />
+        </Routes>
+      </Suspense>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;

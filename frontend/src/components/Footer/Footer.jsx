@@ -45,11 +45,11 @@ const year = date.getFullYear();
         <div >
             <h3 className='font-bold'>Address</h3><br />
             <ul>
-                <li><i class="fa-solid fa-phone-volume"></i> +250 782 171 515</li>
-                <li><i class="fa-solid fa-phone-volume"></i> +250 782 171 515</li>
-                <li><i class="fa-solid fa-location-dot"></i> KG 33 Avenue</li>
-                <li><i class="fa-solid fa-location-dot"></i> Copcom Business Center</li>
-                <li><i class="fa-solid fa-door-open"></i> Door No. CR046</li>
+                <li><i className="fa-solid fa-phone-volume"></i> +250 782 171 515</li>
+                <li><i className="fa-solid fa-phone-volume"></i> +250 782 171 515</li>
+                <li><i className="fa-solid fa-location-dot"></i> KG 33 Avenue</li>
+                <li><i className="fa-solid fa-location-dot"></i> Copcom Business Center</li>
+                <li><i className="fa-solid fa-door-open"></i> Door No. CR046</li>
             </ul>
         </div>
         <div className='flex flex-col'>

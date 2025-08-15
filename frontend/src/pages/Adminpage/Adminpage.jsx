@@ -39,7 +39,7 @@ function Adminpage() {
             <div>
                 <img src={logo} alt="camapany logo"className='w-[6rem]' />
             </div>
-                <ul className='gap-5 cursor-pointer flex'>
+                <ul className='gap-5 cursor-pointer hidden md:flex'>
                     {/* hidden md:flex */}
                     <li onClick={()=>setActivetab("dashboard")}>Dashboard</li>
                     <li onClick={()=>setActivetab("users")}>Accounts</li>
@@ -59,6 +59,12 @@ function Adminpage() {
                     </Link>
 
             </div>
+            <i
+                className="fa-solid fa-grip-lines block ld:hidden cursor-pointer"
+                onClick={() => setMenuOpen(!menuOpen)}
+                ></i>
+
+
         </nav><br /><br />
         {/* admin dashboard */}
             {/* by defaoult this is the admin Dashboard */}
