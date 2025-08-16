@@ -1,11 +1,16 @@
 import React,{useState,useEffect} from 'react'
+import { data } from 'react-router-dom';
 
 function Producttable() {
-  
+  const API_URL = 
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:5000"
+    : "https://einstein-plumbers1.onrender.com";
+
     const [activeproductcategory,setActiveproductcategory] = useState("products")
   const [products, setProducts] = useState([]);
   useEffect(() => {
-    fetch('https://einstein-plumbers1.onrender.com/api/products')
+    fetch(`${API_URL}/api/products`)
       .then(res => res.json())
       .then(data => setProducts(data))
       .catch(err => console.error('Error fetching product:', err));
@@ -17,7 +22,7 @@ const deleteProduct = async (productId) => {
   if (!window.confirm('Are you sure you want to delete this product?')) return;
 
   try {
-    const response = await fetch(`https://einstein-plumbers1.onrender.com/api/products/${productId}`, {
+    const response = await fetch(`${API_URL}/api/products/${productId}`, {
       method: 'DELETE',
     });
 
@@ -26,6 +31,35 @@ const deleteProduct = async (productId) => {
       console.log('Deleted:', data);
       // Remove the deleted product from state to auto-refresh UI
       setProducts(products.filter(product => product.product_id !== productId));
+    } else {
+      console.error('Delete failed:', data.message);
+    }
+  } catch (err) {
+    console.error('Error:', err);
+  }
+};
+// ---------------working on categories---------------
+const [categories, setCategories] = useState([])
+useEffect(()=>{
+  fetch(`${API_URL}/api/categories`)
+  .then(res => res.json())
+  .then(data=> setCategories(data))
+  .catch(err=>console.error('error fetching categories from categories table:',err))
+},[])
+// ---------------dealing with deleting category------------------
+const deletecategory = async (categoryId) => {
+  if (!window.confirm('Are you sure you want to delete this category?')) return;
+
+  try {
+    const response = await fetch(`${API_URL}/api/category/${categoryId}`, {
+      method: 'DELETE',
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      console.log('Deleted:', data);
+      // Remove the deleted category from state to auto-refresh UI
+      setCategories(categories.filter(category => category.category_id !== categoryId));
     } else {
       console.error('Delete failed:', data.message);
     }
@@ -44,7 +78,8 @@ const deleteProduct = async (productId) => {
 
 
               {/* product Table */}
-  
+          {activeproductcategory === 'products' && (
+
         <div className="overflow-x-auto px-4">
           <table className='recent-table w-full text-center'>
             <thead className='bg-gray-100'>
@@ -65,7 +100,7 @@ const deleteProduct = async (productId) => {
                         <td>{oneproduct.product_id}</td>
                         <td>
                            <img
-                            src={`https://einstein-plumbers1.onrender.com/uploads/${oneproduct.product_image1}`}
+                            src={`${API_URL}/uploads/${oneproduct.product_image1}`}
                             className='w-10'
                             alt={oneproduct.product_name}
                             />
@@ -86,6 +121,47 @@ const deleteProduct = async (productId) => {
             </tbody>
           </table>
         </div>
+          )}
+  
+
+          {/* category table */}
+          {activeproductcategory === 'category' && (
+
+           <div className="overflow-x-auto px-4">
+          <table className='recent-table w-full text-center'>
+            <thead className='bg-gray-100'>
+              <tr>
+                <th>Id</th>
+                <th>image</th>
+                <th>name</th>
+                <th>created_At</th>
+              </tr>
+            </thead>
+            <tbody>
+                {categories.map((onecategory)=>(
+                    <tr key={onecategory.category_id}>
+                        <td>{onecategory.category_id}</td>
+                        <td>
+                           <img
+                            src={`${API_URL}/uploads/${onecategory.category_image}`}
+                            className='w-10'
+                            alt={onecategory.category_name}
+                            />
+
+                        </td>
+                        <td>{onecategory.category_name}</td>
+
+                        <td>{new Date(onecategory.created_at).toLocaleString()}</td>
+                        <td className='text-red-600'>
+                        <i className="fa-solid fa-trash" onClick={() => deletecategory(onecategory.category_id)}></i>
+                        </td>
+                    </tr>
+                ))}
+              
+            </tbody>
+          </table>
+        </div>
+          )}
       
     </div>
   )

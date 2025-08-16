@@ -31,18 +31,18 @@ function Navbar() {
             <div className='absolute bottom-0 z-30 bg-[#0077be] fixed left-0 w-full text-center items-center justify-center flex md:hidden font-semibold text-white' style={{padding:'10px'}}>
             <ul className='flex gap-2 justify-around'>
                 <Link to={`/`}>
-                <li className='flex flex-col gap-1 text-center'><i class="fa-solid fa-house-chimney"></i> home</li>
+                <li className='flex flex-col gap-1 text-center'><i className="fa-solid fa-house-chimney"></i> home</li>
                 </Link>
 
-                <li className='flex flex-col gap-1 text-center'><i class="fa-regular fa-address-card"></i> About</li>
+                <li className='flex flex-col gap-1 text-center'><i className="fa-regular fa-address-card"></i> About</li>
                 <Link to={`/services`}>
-                <li className='flex flex-col gap-1 text-center'><i class="fa-solid fa-house-chimney"></i> Services</li>
+                <li className='flex flex-col gap-1 text-center'><i className="fa-solid fa-house-chimney"></i> Services</li>
                 </Link>
                 <Link to={`/contactus`}>
-                <li className='flex flex-col gap-1 text-center'><i class="fa-solid fa-phone-volume"></i> Contact</li>
+                <li className='flex flex-col gap-1 text-center'><i className="fa-solid fa-phone-volume"></i> Contact</li>
                 </Link>
                 <Link to={`/shop`}>
-                <li className='flex flex-col gap-1 text-center'><i class="fa-solid fa-cart-shopping"></i> Shop</li>
+                <li className='flex flex-col gap-1 text-center'><i className="fa-solid fa-cart-shopping"></i> Shop</li>
                 </Link>
             </ul>
             </div>

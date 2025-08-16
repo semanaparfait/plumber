@@ -4,35 +4,54 @@ import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
 import Account from '../../components/Account/Account';
 import logo from '../../assets/logo/logo.jpg';
-import tools from '../../assets/hero/tools.jpg';
 
 function Shop() {
+  const API_URL =
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:5000"
+      : "https://einstein-plumbers1.onrender.com";
+
   const [selectedCategory, setSelectedCategory] = useState("");
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
+  const [cartlength, setCartlength] = useState([]);
   const [openAccount, setOpenAccount] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
   const [showFillFields, setShowFillFields] = useState(false);
 
   // Fetch categories once
   useEffect(() => {
-    fetch("https://einstein-plumbers1.onrender.com/api/categories")
+    fetch(`${API_URL}/api/categories`)
       .then(res => res.json())
       .then(data => setCategories(data))
       .catch(err => console.error(err));
-  }, []);
+  }, [API_URL]);
 
   // Fetch products once
   useEffect(() => {
-    fetch("https://einstein-plumbers1.onrender.com/api/products")
+    fetch(`${API_URL}/api/products`)
       .then(res => res.json())
       .then(data => setProducts(data))
       .catch(err => console.error(err));
-  }, []);
+  }, [API_URL]);
+
+  // Fetch cart length
+  useEffect(() => {
+    fetch(`${API_URL}/api/cart`, {
+      method: "GET",
+      credentials: "include"
+    })
+      .then(res => res.json())
+      .then(data => setCartlength(data))
+      .catch(err => console.error('Error fetching cart length:', err));
+  }, [API_URL]);
 
   // Filter products by selected category
   const filteredProducts = selectedCategory
-    ? products.filter(p => p.category_name === selectedCategory)
+    ? products.filter(p => {
+        const category = categories.find(c => c.category_id === p.category_id);
+        return category?.category_name === selectedCategory;
+      })
     : products;
 
   // Notification components
@@ -74,8 +93,11 @@ function Shop() {
             <Link to={`/shop`}><li>Shop</li></Link>
           </ul>
           <div className='flex items-center gap-3'>
-            <Link to={`/cart`}>
+            <Link to={`/cart`} className="relative inline-block">
               <i className="fa-solid fa-cart-arrow-down text-[20px]"></i>
+              <span className="absolute -bottom-4 left-1/1 -translate-x-1/2 bg-[#0077be] text-white font-bold rounded-full w-6 h-6 flex items-center justify-center text-sm">
+                {cartlength.length ? cartlength.length : 0}
+              </span>
             </Link>
             <button className='rounded-[20px] border text-[#000000] cursor-pointer'
               style={{ padding: '5px 12px' }}
@@ -83,40 +105,6 @@ function Shop() {
           </div>
         </div>
       </div>
-
-      {/* Hero Section */}
-      <div
-        style={{
-          width: '100%',
-          height: '80vh',
-          backgroundImage: `url(${tools})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          position: 'relative'
-        }}
-      >
-        <div style={{
-          position: 'absolute',
-          top: 0, left: 0,
-          width: '100%', height: '100%',
-          backgroundColor: 'rgba(0,0,0,0.5)',
-          zIndex: 1
-        }}></div>
-
-        <h1 className='shop-overlay text-5xl'
-          style={{
-            position: 'relative',
-            zIndex: 2,
-            color: 'white',
-            textAlign: 'center',
-            top: '50%',
-            transform: 'translateY(-50%)',
-            fontWeight: 'bold'
-          }}>
-          Find the Perfect Plumbing Solutions for Every Job <br />
-          <span className='text-[#0077be]'>EINSTEIN PLUMBER ltd</span>
-        </h1>
-      </div><br />
 
       {/* Categories */}
       <div className="category-products py-10">
@@ -128,11 +116,11 @@ function Shop() {
           {categories.map(cat => (
             <div
               key={cat.category_id}
-              className="category-item w-fit shadow rounded-[7px] cursor-pointer"
+              className={`category-item w-fit shadow rounded-[7px] cursor-pointer ${selectedCategory === cat.category_name ? "bg-[#0077be] text-white" : ""}`}
               style={{ padding: "5px" }}
               onClick={() => setSelectedCategory(cat.category_name)}
             >
-              <img src={`https://einstein-plumbers1.onrender.com/uploads/${cat.category_image}`}
+              <img src={`${API_URL}/uploads/${cat.category_image}`}
                 alt={cat.category_name} className="w-[4rem]" />
               <p className="text-center font-semibold text-[15px]">{cat.category_name}</p>
             </div>
@@ -146,24 +134,33 @@ function Shop() {
           Find The Best Deal For <br />
           You as a <span className='text-[#0077be]'>Plumber</span>
         </h1>
-        <div className='grid md:grid-cols-4 gap-6 mt-10'>
-          {filteredProducts.map(product => (
-            <Link key={product.product_id} to={`/itemoverview/${product.product_id}`}>
-              <div>
-                <img
-                  src={`https://einstein-plumbers1.onrender.com/uploads/${product.product_image1}`}
-                  alt={product.product_name}
-                  className='w-full object-cover rounded-tl-[20px] rounded-tr-[20px] h-[15rem]'
-                />
-                <div className='shadow-md rounded-bl-[10px] rounded-br-[10px]' style={{ paddingLeft: '20px' }}>
-                  <h2 className='font-bold'>{product.product_name}</h2>
-                  <p>{product.product_description}</p>
-                  <p className='font-black text-2xl text-amber-700'>{product.product_newprice} RWF</p>
+
+        {filteredProducts.length > 0 ? (
+          <div className='grid md:grid-cols-4 gap-6 mt-10'>
+            {filteredProducts.map(product => (
+              <Link key={product.product_id} to={`/itemoverview/${product.product_id}`}>
+                <div>
+                  <img
+                    src={`${API_URL}/uploads/${product.product_image1}`}
+                    alt={product.product_name}
+                    className='w-full object-cover rounded-tl-[20px] rounded-tr-[20px] h-[15rem]'
+                  />
+                  <div className='shadow-md rounded-bl-[10px] rounded-br-[10px]' style={{ paddingLeft: '20px' }}>
+                    <h2 className='font-bold'>{product.product_name}</h2>
+                    <p>{product.product_description}</p>
+                    <p className='font-black text-2xl text-amber-700'>
+                      {Number(product.product_newprice).toLocaleString()} RWF
+                    </p>
+                  </div>
                 </div>
-              </div>
-            </Link>
-          ))}
-        </div>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <h1 className="text-center text-xl font-bold text-gray-600 mt-10">
+            No product belongs to this category
+          </h1>
+        )}
       </div>
 
       <Footer />

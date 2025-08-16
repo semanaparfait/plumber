@@ -1,11 +1,15 @@
 import React, {useState, useEffect} from 'react'
 
 function Uploadproducts() {
-  
+  const API_URL = 
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:5000/api"
+    : "https://einstein-plumbers1.onrender.com/api";
+
     //   fetching categories
       useEffect(() => {
         // Fetch categories from backend
-        fetch("https://einstein-plumbers1.onrender.com/api/categories")
+        fetch(`${API_URL}/categories`)
           .then((res) => res.json())
           .then((data) => setCategories(data))
           .catch((err) => console.error(err));
@@ -30,7 +34,7 @@ function Uploadproducts() {
         }
     
         try {
-          const res = await fetch("https://einstein-plumbers1.onrender.com/api/categories", {
+          const res = await fetch(`${API_URL}/categories`, {
             method: "POST",
             body: formData,
           });
@@ -73,7 +77,7 @@ function Uploadproducts() {
     }
 
     try {
-      const res = await fetch("https://einstein-plumbers1.onrender.com/api/products", {
+      const res = await fetch(`${API_URL}/products`, {
         method: "POST",
         body: formData,
       });
@@ -101,7 +105,7 @@ function Uploadproducts() {
                 <div>
         <div className='flex items-center justify-center '
         style={{paddingTop:'2rem'}}>
-        <div className=' w-1/2 '>
+        <div className=' w-[90%]md:w-1/2  '>
             <form className='flex flex-col gap-4'onSubmit={handleUploadproducts} >
             <div className='flex w-fit flex-wrap gap-2.5'>
                 <input
@@ -157,7 +161,7 @@ function Uploadproducts() {
 
         </div>
           </div><br /><br /><hr />
-        <div className="upload-new-category"><br />
+        <div className="upload-new-category w-[90%]md:w-1/2  "><br />
             <h1 className='text-center font-bold text-3xl'>Upload  category</h1><br />
             <form onSubmit={handleUpload} className='flex flex-col gap-4 items-center justify-center'>
                 <input

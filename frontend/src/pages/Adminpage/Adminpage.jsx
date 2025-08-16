@@ -1,12 +1,18 @@
 import React, {useEffect, useState} from 'react'
 import './Adminpage.css'
-import { Link } from 'react-router-dom'
+import { data, Link } from 'react-router-dom'
 import logo  from '../../assets/logo/logo.jpg'
 import Uploadproducts from '../../components/Upload/Uploadproducts'
 import Tables from '../../components/tables/Tables'
 import Producttable from '../../components/proucttable/Producttable'
+import { act } from 'react'
+import Carttable from '../../components/Carttable/Carttable'
 
 function Adminpage() {
+    const API_URL = 
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:5000/api"
+    : "https://einstein-plumbers1.onrender.com/api";
     
     const [activetab, setActivetab] = useState("dashboard")
 
@@ -14,7 +20,7 @@ function Adminpage() {
 //   fetching for contact us
     const [contactUsMessages, setContactUsMessages] = useState([]);
     useEffect(() => {
-        fetch('https://einstein-plumbers1.onrender.com/api/contactus')
+        fetch(`${API_URL}/contactus`)
         .then(res => res.json())
         .then(data => setContactUsMessages(data))
         .catch(err => console.error('Error fetching contact us messages:', err));
@@ -22,20 +28,42 @@ function Adminpage() {
 //   fetching news letter
     const [newsLetterSubscribers, setNewsLetterSubscribers] = useState([]);
     useEffect(() => {
-        fetch('https://einstein-plumbers1.onrender.com/api/subscribe')
+        fetch(`${API_URL}/subscribe`)
         .then(res => res.json())  
         .then(data => setNewsLetterSubscribers(data))
         .catch(err => console.error('Error fetching news letter subscribers:', err));
     }, []);
 
-    // for categories
+    // getting all total user
+    const[totalusers,setTotaluser]=useState([])
+    useEffect(()=>{
+        fetch(`${API_URL}/users`, {
+            method: "GET",
+            credentials: "include"
+        })
+        .then(res=>res.json())
+        .then(data=>setTotaluser(data))
+        .catch(err=>console.error('erro fetching total users:',err))
+    },[])
+
+    const[totalproducts,setTotalproducts] = useState([])
+    useEffect(()=>{
+        fetch(`${API_URL}/products`,{
+
+            method: "GET",
+            credentials: "include"
+        })
+        .then(res => res.json())
+        .then(data => setTotalproducts(data))
+        .catch(err=>console.error('error fetching products:',err))
+    },[])
    
  
-
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <div>
-        <nav className='flex items-center justify-between bg-[#0077be] '>
+        <nav className='flex items-center justify-between bg-[#0077be] fixed w-full'>
             <div>
                 <img src={logo} alt="camapany logo"className='w-[6rem]' />
             </div>
@@ -49,8 +77,6 @@ function Adminpage() {
                     <li onClick={()=>setActivetab("hired us")}>Hired us</li>
                     <li onClick={()=>setActivetab("contacted us")}>contacted us</li>
                     <li onClick={()=>setActivetab("news letter")}>News Letter</li>
-                </ul>
-  
             <div>
                 <Link to={`/`}>
                 <button className='bg-amber-400 rounded-2xl'
@@ -59,13 +85,34 @@ function Adminpage() {
                     </Link>
 
             </div>
+                </ul>
+  
             <i
                 className="fa-solid fa-grip-lines block ld:hidden cursor-pointer"
                 onClick={() => setMenuOpen(!menuOpen)}
                 ></i>
+                      {menuOpen && (
+                        
+        <ul className="absolute top-0 right-0  h-[100vh] bg-[#0077be] flex flex-col items-center text-white gap-4  md:hidden z-50">
+            <li className='font-black text-red' onClick={()=>setMenuOpen(false)}>X</li>
+          <li onClick={() => setActivetab("dashboard")}>Dashboard</li>
+          <li onClick={() => setActivetab("users")}>Accounts</li>
+          <li onClick={() => setActivetab("product")}>Products</li>
+          <li onClick={() => setActivetab("carts")}>Carts</li>
+          <li onClick={() => setActivetab("upload")}>Upload</li>
+          <li onClick={() => setActivetab("hired us")}>Hired us</li>
+          <li onClick={() => setActivetab("contacted us")}>Contacted us</li>
+          <li onClick={() => setActivetab("news letter")}>News Letter</li>
+          <Link to={`/`}>
+            <button className="bg-amber-400 rounded-2xl px-3 py-1 font-semibold" style={{padding:'4px 10px'}}>
+              Back Home
+            </button>
+          </Link>
+        </ul>
+                      )}
 
 
-        </nav><br /><br />
+        </nav><br /><br /><br /><br /><br />
         {/* admin dashboard */}
             {/* by defaoult this is the admin Dashboard */}
             {activetab === 'dashboard' && (
@@ -78,7 +125,7 @@ function Adminpage() {
                         <i className="fas fa-film"></i>
                         </div>
                         <div className="stat-details">
-                        <h3 className='text-[24px] text-[black] font-bold'>2,584</h3>
+                        <h3 className='text-[24px] text-[black] font-bold'>{totalproducts.length ? totalproducts.length : 0}</h3>
                         <p className='text-[#777] text-[14px]'>Total products</p>
                         </div>
                     </div>
@@ -88,7 +135,7 @@ function Adminpage() {
                         <i className="fas fa-users"></i>
                         </div>
                         <div className="stat-details">
-                        <h3 className='text-[24px] text-[black] font-bold'>18,249</h3>
+                        <h3 className='text-[24px] text-[black] font-bold'>{totalusers.length ? totalusers.length : 0}</h3>
                         <p className='text-[#777] text-[14px]'>Total Users</p>
                         </div>
                     </div>
@@ -129,14 +176,18 @@ function Adminpage() {
         {activetab === 'upload' && (
             <Uploadproducts/>
         )}
+        {activetab === 'carts' && (
+            <Carttable/>
+        )}
           {/* fetching contact us messages */}
           {activetab === 'contacted us' && (
 
-          <div>
+          <div className='overflow-x-auto'>
             <h2 className='text-center text-2xl font-bold'>Contact Us Messages</h2>
             <table className='recent-table w-full'>
                 <thead className='bg-gray-100'>
                     <tr>
+                        <th>ID</th>
                         <th>Name</th>
                         <th>Sended_at</th>
                         <th>Phone Number</th>
@@ -163,11 +214,12 @@ function Adminpage() {
           )}
           {/* fetching news letter subscribers */}
           {activetab === 'news letter' && (
-          <div>
+          <div className='overflow-x-auto'>
             <h2 className='text-center text-2xl font-bold'>News Letter Subscribers</h2>
             <table className='recent-table w-full'>
                 <thead className='bg-gray-100'>
                     <tr>
+                        <th>ID</th>
                         <th>Email</th>
                         <th>Subscribed At</th>
                     </tr>

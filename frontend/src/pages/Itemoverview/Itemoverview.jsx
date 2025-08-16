@@ -4,13 +4,18 @@ import Footer from '../../components/Footer/Footer';
 import Navbar from '../../components/Navbar/Navbar';
 
 function Itemoverview() {
+      const API_URL = 
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:5000"
+    : "https://einstein-plumbers1.onrender.com";
+
   const { productid } = useParams();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [count, setCount] = useState(1);
 
 useEffect(() => {
-  fetch("https://einstein-plumbers1.onrender.com/api/products")
+  fetch(`${API_URL}/api/products`)
     .then((res) => res.json())
     .then((data) => {
       setProducts(data);
@@ -62,7 +67,7 @@ useEffect(() => {
 
 const handleAddToCart = async (productId) => {
   try {
-    const res = await fetch("https://einstein-plumbers1.onrender.com/api/cart", {
+    const res = await fetch(`${API_URL}/api/cart`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -79,6 +84,8 @@ const handleAddToCart = async (productId) => {
 };
 
 
+
+
   return (
     <div>
       <Navbar />
@@ -89,7 +96,7 @@ const handleAddToCart = async (productId) => {
           <div>
             
         <img 
-          src={`https://einstein-plumbers1.onrender.com/uploads/${item.product_image1}`} 
+          src={`${API_URL}/uploads/${item.product_image1}`} 
           alt={item.product_name} 
           className='w-[90%] md:w-[17rem] h-[23rem] rounded-3xl object-cover'
         />
@@ -103,7 +110,7 @@ const handleAddToCart = async (productId) => {
             <p className='bg-amber-500 w-fit rounded-2xl' style={{ padding: '4px 20px' }}>
               Free shipping
             </p>
-            <h1>{item.product_oldprice}</h1>
+            <strike><h1 className='font-bold text-gray'>{item.product_oldprice}</h1></strike>
 
             <div>
               <h1 className='font-black text-3xl text-amber-900'>

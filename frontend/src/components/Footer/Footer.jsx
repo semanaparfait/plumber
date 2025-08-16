@@ -28,17 +28,17 @@ const year = date.getFullYear();
             <h3 className='font-bold'>Menu</h3><br />
             <ul>
                 <Link to={`/`}>
-                <li><i class="fa-solid fa-house-chimney"></i> Home</li>
+                <li><i className="fa-solid fa-house-chimney"></i> Home</li>
                 </Link>
-                <li><i class="fa-regular fa-address-card"></i> About</li>
+                <li><i className="fa-regular fa-address-card"></i> About</li>
                 <Link to={`/services`}>
-                <li><i class="fa-solid fa-house-chimney"></i> Services</li>
+                <li><i className="fa-solid fa-house-chimney"></i> Services</li>
                 </Link>
                 <Link to={`/contactus`}>
-                <li><i class="fa-solid fa-phone-volume"></i> Contact</li>
+                <li><i className="fa-solid fa-phone-volume"></i> Contact</li>
                 </Link>
                 <Link to={`/shop`}>
-                <li><i class="fa-solid fa-cart-shopping"></i> Shop</li>
+                <li><i className="fa-solid fa-cart-shopping"></i> Shop</li>
                 </Link>
             </ul>
         </div>

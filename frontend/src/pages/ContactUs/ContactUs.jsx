@@ -7,6 +7,11 @@ import bg1 from "../../assets/services/bgservices.jpg";
 import arrow from "../../assets/contactus/arrow.png";
 
 function ContactUs() {
+      const API_URL = 
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:5000/api"
+    : "https://einstein-plumbers1.onrender.com/api";
+
   const [showNotification, setShowNotification] = useState(false);
   const [fillAllFields, setFillAllFields] = useState(false);
   const [name, setName] = useState("");
@@ -25,7 +30,7 @@ function ContactUs() {
       email: newsemail,
     };
     try {
-      const response = await fetch("https://einstein-plumbers1.onrender.com/api/subscribe", {
+      const response = await fetch(`${API_URL}/subscribe`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -62,7 +67,7 @@ function ContactUs() {
     };
 
     try {
-      const response = await fetch("https://einstein-plumbers1.onrender.com/api/contactus", {
+      const response = await fetch(`${API_URL}/contactus`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

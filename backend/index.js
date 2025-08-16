@@ -25,9 +25,13 @@ const router = express.Router();
 app.use(router);
 
 app.use(cors({
-  origin: 'https://einstein-plumbers.onrender.com',
+  origin: [
+    'http://localhost:5173', // React local
+    'https://einstein-plumbers.onrender.com' // deployed frontend
+  ],
   credentials: true,
 }));
+
 
 
 const pool = new Pool(
@@ -238,7 +242,16 @@ app.delete('/api/users/:id', async (req, res) => {
   }
 });
 
-
+// ---------fetching all users------------
+app.get('/api/users', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM users');
+    res.status(200).json(result.rows);
+  } catch (err) {
+    console.error('Error fetching users:', err);
+    res.status(500).json({ message: 'Server error fetching users' });
+  }
+});
 // insert contact us endpoint
 app.post('/api/contactus', async (req, res) => {
   console.log('Received data:', req.body);
@@ -342,12 +355,36 @@ app.post("/api/categories", upload.single("category_image"), async (req, res) =>
 app.get("/api/categories", async (req, res) => {
   try {
     const result = await pool.query(
-      "SELECT category_id, category_name, category_image FROM categories ORDER BY category_name"
+      "SELECT * FROM categories "
     );
     res.json(result.rows);
   } catch (err) {
     console.error("Error fetching categories:", err);
     res.status(500).json({ error: "Failed to fetch categories" });
+  }
+});
+// -----------deleting category----------
+app.delete('/api/category/:id', async (req, res) => {
+  const { id } = req.params; // this is the product_id from the URL
+
+  if (!id) {
+    return res.status(400).json({ message: 'category ID is required' });
+  }
+
+  try {
+    const result = await pool.query(
+      'DELETE FROM categories WHERE category_id = $1 RETURNING *',
+      [id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: 'category not found' });
+    }
+
+    res.status(200).json({ message: 'category deleted', category: result.rows[0] });
+  } catch (err) {
+    console.error('Error deleting category:', err);
+    res.status(500).json({ message: 'Server error', error: err.message });
   }
 });
 
@@ -446,13 +483,14 @@ app.delete('/api/products/:id', async (req, res) => {
 });
 
 
-
-
 //insering to cart
 // Add to cart
 app.post("/api/cart", authenticateToken, async (req, res) => {
   const { product_id, quantity } = req.body;
   const user_id = req.user.id;
+  if (!quantity || quantity <= 0) {
+  return res.status(400).json({ error: "Quantity must be greater than 0" });
+}
 
   try {
     // Check if product already in cart for this user
@@ -483,7 +521,6 @@ app.post("/api/cart", authenticateToken, async (req, res) => {
   }
 });
 
-
  // get the cart items for the user
  // Get cart items
 app.get("/api/cart", authenticateToken, async (req, res) => {
@@ -491,18 +528,15 @@ app.get("/api/cart", authenticateToken, async (req, res) => {
 
   try {
     const result = await pool.query(
-      `SELECT 
-         c.cart_id,
-         c.product_id,
-         c.quantity,
-         p.product_name,
-         p.product_newprice,
-         p.product_image1
-       FROM cart c
-       JOIN products p 
-         ON p.product_id = c.product_id
-       WHERE c.user_id = $1
-       ORDER BY c.cart_id DESC`,
+`SELECT 
+*
+FROM cart c
+JOIN products p 
+  ON p.product_id = c.product_id
+WHERE c.user_id = $1
+  AND c.cart_status = 'pending'
+ORDER BY c.cart_id DESC
+`,
       [user_id]
     );
 
@@ -535,6 +569,35 @@ app.delete("/api/cart/:id", authenticateToken, async (req, res) => {
     res.status(500).json({ error: "Error removing item" });
   }
 });
+
+// getting all cart details to ceo
+app.get('/api/admin/cart-details', async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT 
+        u.id AS user_id,
+        u.username,
+        u.phonenumber,
+        c.cart_id,
+        c.quantity,
+        c.cart_status,
+        c.created_at,
+        p.product_id,
+        p.product_name,
+        p.product_newprice,
+        p.product_image1
+      FROM cart c
+      JOIN users u ON c.user_id = u.id
+      JOIN products p ON c.product_id = p.product_id
+      ORDER BY c.cart_id DESC;
+    `);
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Error fetching cart details:', err);
+    res.status(500).send('Server error');
+  }
+});
+
 
 
 

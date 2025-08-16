@@ -5,11 +5,15 @@ import { Link } from 'react-router-dom';
 
 
 function Cart() {
+      const API_URL = 
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:5000"
+    : "https://einstein-plumbers1.onrender.com";
   
   const [cartItems, setCartItems] = useState([]);
 
 useEffect(() => {
-  fetch('https://einstein-plumbers1.onrender.com/api/cart', {
+  fetch(`${API_URL}/api/cart`, {
     method: 'GET',
     credentials: 'include',
   })
@@ -30,7 +34,7 @@ const removeFromCart = async (cartId) => {
   if (!cartId) return; // safeguard
 
   try {
-    const res = await fetch(`https://einstein-plumbers1.onrender.com/api/cart/${cartId}`, {
+    const res = await fetch(`${API_URL}/api/cart/${cartId}`, {
       method: "DELETE",
       credentials: "include",
     });
@@ -53,6 +57,11 @@ const totalPrice = cartItems.reduce((sum, item) => {
   const qty = Number(item.quantity) || 0;
   return sum + price * qty;
 }, 0);
+
+const totalitems = cartItems.reduce((sum, item) => {
+  return sum + (Number(item.quantity) || 0);
+}, 0);
+
 
   return (
     <div>
@@ -86,12 +95,12 @@ const totalPrice = cartItems.reduce((sum, item) => {
         {/* Render cart rows from backend */}
         {cartItems.map((item) => (
           
-          <div key={item.id} className="grid grid-cols-4 md:grid-cols-6  items-center justify-between text-center border-b border-b-gray-300 "
+          <div key={item.cart_id} className="grid grid-cols-4 md:grid-cols-6  items-center justify-between text-center border-b border-b-gray-300 "
           style={{padding:'10px 2rem'}}
           >
             <div className='flex flex-wrap  items-center gap-0 md:gap-4'>
             <img 
-            src={`https://einstein-plumbers1.onrender.com/uploads/${item.product_image1}`} 
+            src={`${API_URL}/uploads/${item.product_image1}`} 
             // src={item.product_image1} 
             alt={item.name} className="w-16 h-16 object-cover mx-auto" />
             <p className='font-semibold'>{item.product_name}</p>
@@ -100,7 +109,7 @@ const totalPrice = cartItems.reduce((sum, item) => {
             <p className='hidden md:block'> {Number(item.product_newprice).toLocaleString()}RWF</p>
             <p>{item.quantity}</p>
             <p className='font-bold'> {(Number(item.product_newprice) * Number(item.quantity)).toLocaleString()} RWF</p>
-            <p className='text-green-500 font-black'>{item.cart_statust}</p>
+            <p className='text-green-500 font-black'>{item.cart_status}</p>
             <button className="text-red-500" onClick={() => removeFromCart(item.cart_id)}>X</button>
           </div>
         ))}
@@ -116,7 +125,7 @@ const totalPrice = cartItems.reduce((sum, item) => {
         </div>
         <div className='flex justify-between border-b border-b-gray-500' style={{padding:'15px 0px'}}>
           <p>Items</p>
-          <p>10 </p>
+          <p>{totalitems}</p>
         </div>
         <div className='flex justify-between ' style={{padding:'15px 0px'}}>
           <h2 className='font-bold'>Total</h2>
