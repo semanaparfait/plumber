@@ -26,11 +26,13 @@ app.use(router);
 
 app.use(cors({
   origin: [
-    'http://localhost:5173', // React local
+    'http://localhost:4173', // React preview
+    'http://localhost:5173', // React dev
     'https://einstein-plumbers.onrender.com' // deployed frontend
   ],
   credentials: true,
 }));
+
 
 
 

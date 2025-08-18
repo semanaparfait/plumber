@@ -83,7 +83,7 @@ function Shop() {
       <div style={{ padding: '10px' }}>
         <div className='flex justify-around items-center border-gray-300 border'>
           <Link to={`/`}>
-            <img src={logo} alt="logo" className='w-[5rem]' />
+            <img src={logo} alt="logo" className='w-[5rem]' loading='lazy' />
           </Link>
           <ul className='gap-5 cursor-pointer hidden md:flex'>
             <li>Home</li>
@@ -120,8 +120,9 @@ function Shop() {
               style={{ padding: "5px" }}
               onClick={() => setSelectedCategory(cat.category_name)}
             >
-              <img src={`${API_URL}/uploads/${cat.category_image}`}
-                alt={cat.category_name} className="w-[4rem]" />
+              <img src={`${API_URL}/uploads/${cat.category_image}` }
+                alt={cat.category_name} className="w-[4rem]"
+                loading="lazy" />
               <p className="text-center font-semibold text-[15px]">{cat.category_name}</p>
             </div>
           ))}
@@ -143,6 +144,7 @@ function Shop() {
                   <img
                     src={`${API_URL}/uploads/${product.product_image1}`}
                     alt={product.product_name}
+                    loading="lazy"
                     className='w-full object-cover rounded-tl-[20px] rounded-tr-[20px] h-[15rem]'
                   />
                   <div className='shadow-md rounded-bl-[10px] rounded-br-[10px]' style={{ paddingLeft: '20px' }}>
