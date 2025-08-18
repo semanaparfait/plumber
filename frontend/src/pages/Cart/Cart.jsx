@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../../components/Navbar/Navbar';
 import cart from '../../assets/cart/download.jpeg'
 import { Link } from 'react-router-dom';
-
+import { useNavigate } from "react-router-dom";
 
 function Cart() {
       const API_URL = 
@@ -61,8 +61,41 @@ const totalPrice = cartItems.reduce((sum, item) => {
 const totalitems = cartItems.reduce((sum, item) => {
   return sum + (Number(item.quantity) || 0);
 }, 0);
+// ----------------handling to order or check out-------------
+const navigate = useNavigate();
+const [user, setUser] = useState(null);
+
+useEffect(() => {
+  fetch(`${API_URL}/api/me`, {
+    method: "GET",
+    credentials: "include"
+  })
+    .then(res => {
+      if (!res.ok) throw new Error("Not logged in");
+      return res.json();
+    })
+    .then(data => setUser(data))
+    .catch(err => console.error("Failed to fetch user:", err));
+}, []);
 
 
+
+const handleProceedToCheckout = () => {
+  if(cartItems.length === 0){
+    alert("Your cart is empty!");
+    return;
+  }
+
+  // Assuming you have a logged-in user object
+  const username = user?.username || "Guest";
+
+  navigate("/checkout", {
+    state: {
+      cartItems: cartItems,
+      username: username
+    }
+  });
+};
   return (
     <div>
       <Navbar />
@@ -80,6 +113,9 @@ const totalitems = cartItems.reduce((sum, item) => {
       <>
      
       <div className="cart px-8 py-6 " >
+
+
+
         <h1 className='cart-heading text-center font-black text-4xl'>MY CART PRODUCT FROM <br /><span className='text-[#0077be]'>EINSTEIN PLUMBERS</span></h1><br />
         {/* Render table header */}
         <div className="cart-items-title hidden md:grid grid-cols-6 text-center font-semibold pb-2 ">
@@ -116,7 +152,7 @@ const totalitems = cartItems.reduce((sum, item) => {
       </div><br /><br />
       <div style={{padding:'0px 20px'}}>
 
-      <div className='flex flex-wrap gap-5 items-center justify-between'>
+      <div className='flex flex-wrap gap-5 items-center justify-between '>
       <div className='w-full md:w-[40%]'>
         <h1 className='font-black text-3xl'>Cart Total</h1><br />
         <div className='flex justify-between border-b border-b-gray-500' style={{paddingBottom:'15px'}}>
@@ -131,7 +167,14 @@ const totalitems = cartItems.reduce((sum, item) => {
           <h2 className='font-bold'>Total</h2>
           <h2 className='font-bold'> {totalPrice.toLocaleString()} </h2>
         </div>
-        <button className='bg-[#0077be] rounded-[6px] font-bold text-white' style={{padding:'10px 15px'}}>PROCED TO CHECKOUT</button>
+      <button
+        onClick={handleProceedToCheckout}
+        className='bg-[#0077be] rounded-[6px] font-bold text-white'
+        style={{padding:'10px 15px'}}
+      >
+        PROCEED TO CHECKOUT
+      </button>
+
       </div>
       <div className=' w-full md:w-[40%]'>
         <form >

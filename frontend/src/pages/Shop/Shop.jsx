@@ -133,7 +133,7 @@ function Shop() {
         <h1 className='text-center shop-heading text-4xl'>
           Find The Best Deal For <br />
           You as a <span className='text-[#0077be]'>Plumber</span>
-        </h1>
+        </h1><br />
 
         {filteredProducts.length > 0 ? (
           <div className='grid md:grid-cols-4 gap-6 mt-10'>

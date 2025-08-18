@@ -151,9 +151,11 @@ app.post('/api/login', async (req, res) => {
       return res.status(500).json({ message: 'Server configuration error' });
     }
 
-    const token = jwt.sign({ id: user.id, phonenumber: user.phonenumber }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ id: user.id, phonenumber: user.phonenumber,username: user.username, }, process.env.JWT_SECRET, {
       expiresIn: '1h',
     });
+    // console.log("JWT generated:", token);
+console.log("Setting cookie session_token...");
 const isProduction = process.env.NODE_ENV === 'production';
 res.cookie('session_token', token, {
   httpOnly: true,
@@ -170,6 +172,15 @@ res.cookie('session_token', token, {
     res.status(500).json({ message: 'Server error', error: err.message });
   }
 });
+
+// getting the logged in user
+app.get("/api/me", authenticateToken, (req, res) => {
+  const { id, username, phonenumber } = req.user;
+  res.json({ id, username, phonenumber });
+});
+
+
+
 
 
 // for admin
@@ -595,6 +606,59 @@ app.get('/api/admin/cart-details', async (req, res) => {
   } catch (err) {
     console.error('Error fetching cart details:', err);
     res.status(500).send('Server error');
+  }
+});
+// -----------deling on orders-------------
+router.post("/checkout", async (req, res) => {
+  const { userId, deliveryMethod } = req.body;
+
+  try {
+    // 1. Get cart items for the user
+    const cartItems = await pool.query(
+      `SELECT c.product_id, c.quantity, p.price 
+       FROM cart c 
+       JOIN products p ON c.product_id = p.id
+       WHERE c.user_id = $1`,
+      [userId]
+    );
+
+    if (cartItems.rows.length === 0) {
+      return res.status(400).json({ error: "Cart is empty" });
+    }
+
+    // 2. Calculate total amount
+    let totalAmount = 0;
+    cartItems.rows.forEach((item) => {
+      totalAmount += item.price * item.quantity;
+    });
+
+    // 3. Create order
+    const order = await pool.query(
+      `INSERT INTO orders (user_id, delivery_method, total_amount, status, created_at)
+       VALUES ($1, $2, $3, 'pending', NOW())
+       RETURNING id`,
+      [userId, deliveryMethod, totalAmount]
+    );
+
+    const orderId = order.rows[0].id;
+
+    // 4. Insert into order_items
+    const insertPromises = cartItems.rows.map((item) => {
+      return pool.query(
+        `INSERT INTO order_items (order_id, product_id, quantity, price)
+         VALUES ($1, $2, $3, $4)`,
+        [orderId, item.product_id, item.quantity, item.price]
+      );
+    });
+    await Promise.all(insertPromises);
+
+    // 5. Clear cart
+    await pool.query("DELETE FROM cart WHERE user_id = $1", [userId]);
+
+    res.status(201).json({ message: "Order placed successfully", orderId });
+  } catch (err) {
+    console.error("Checkout error:", err);
+    res.status(500).json({ error: "Something went wrong during checkout" });
   }
 });
 
