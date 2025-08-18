@@ -1,5 +1,5 @@
 import React,{useState, useEffect} from 'react'
-import mtn from '../../assets/checkout/mtn.jpeg'
+// import mtn from '../../assets/checkout/mtn.jpeg'
 import { useLocation, useNavigate, Link } from "react-router-dom";
 
 
@@ -254,7 +254,7 @@ const location = useLocation();
         )}
         <div className='flex flex-col gap-1.5'><br />
             <h2 className='font-bold text-[17px]'>Payment methos</h2>
-                <img src={mtn} alt="payment methos" className='w-[4rem] rounded-[10px]' />
+                <img src='https://i.pinimg.com/736x/7f/eb/02/7feb0256dc66ee941c1a5d4c945ed60b.jpg' alt="payment methos" className='w-[4rem] rounded-[10px]' />
             
         </div>
         </div>
