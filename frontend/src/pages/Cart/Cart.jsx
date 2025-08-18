@@ -152,7 +152,7 @@ const handleProceedToCheckout = () => {
       </div><br /><br />
       <div style={{padding:'0px 20px'}}>
 
-      <div className='flex flex-wrap gap-5 items-center justify-between '>
+      <div className='flex flex-wrap gap-5 items-center justify-evenly '>
       <div className='w-full md:w-[40%]'>
         <h1 className='font-black text-3xl'>Cart Total</h1><br />
         <div className='flex justify-between border-b border-b-gray-500' style={{paddingBottom:'15px'}}>
@@ -177,7 +177,7 @@ const handleProceedToCheckout = () => {
 
       </div>
       <div className=' w-full md:w-[40%]'>
-        <form >
+        <form className='flex flex-col gap-4'>
         <label>If you have a promo code, Enter it here</label><br /><br />
         <input type="text"
         placeholder='Promocode'
@@ -191,7 +191,7 @@ const handleProceedToCheckout = () => {
         </form>
       </div>
       </div>
-      </div><br />
+      </div><br /><br /><br />
          </>
   )}
     </div>

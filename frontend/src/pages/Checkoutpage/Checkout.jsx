@@ -66,14 +66,14 @@ const location = useLocation();
 
 
   return (
-    <div style={{padding:'20px 30px'}}>
-        <h1>Hello , {username}</h1>
+    <div style={{padding:'5px '}}>
+        <h1 style={{paddingLeft:'30px'}}>Hello , {username}</h1>
         <Link to={`/cart`}>
         <p className='text-[#0077be]'><i className="fa-solid fa-arrow-left"></i> Back to cart</p><br />
         </Link>
-        <div className='flex flex-wrap items-center justify-between gap-3.5'>
+        <div className='flex flex-wrap items-center justify-evenly gap-3.5'>
         <div className='w-full md:w-[40%] '>
-            <div className='flex'>
+            <div >
             <div>
             <div className="rounded-xl shadow-2xl bg-white " style={{padding:'30px'}}>
             <h1 className="font-bold text-lg mb-4">Customer Information</h1>
