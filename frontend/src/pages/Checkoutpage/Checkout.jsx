@@ -1,5 +1,5 @@
 import React,{useState, useEffect} from 'react'
-import mtn from '../../assets/checkout/MTN.JPEG'
+import mtn from '../../assets/checkout/mtn.jpeg'
 import { useLocation, useNavigate, Link } from "react-router-dom";
 
 
