@@ -66,7 +66,7 @@ const location = useLocation();
 
 
   return (
-    <div style={{padding:'5px '}}>
+    <div style={{padding:'5px 15px'}}>
         <h1 style={{paddingLeft:'30px'}}>Hello , {username}</h1>
         <Link to={`/cart`}>
         <p className='text-[#0077be]'><i className="fa-solid fa-arrow-left"></i> Back to cart</p><br />
@@ -330,7 +330,7 @@ const location = useLocation();
                     <li>• 30-day return policy</li>
                     <li>• 24/7</li>
                 </ul>
-            </div>
+            </div><br />
 
         </div>
         </div>

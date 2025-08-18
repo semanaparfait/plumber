@@ -84,35 +84,59 @@ function authenticateToken(req, res, next) {
 
 
 // Signup endpoint
+// Signup endpoint with unique phone check
 app.post('/api/signup', async (req, res) => {
-  const { username,  phonenumber, password } = req.body;
+  const { username, phonenumber, password } = req.body;
 
-  if (!username  || !password) {
-    return res.status(400).json({ message: 'Username and password are required' });
+  // 1️⃣ Basic validation
+  if (!username || !phonenumber || !password) {
+    return res.status(400).json({ message: 'All fields are required.' });
   }
+
+  if (password.length < 6) {
+    return res.status(400).json({ message: 'Password must be at least 6 characters.' });
+  }
+
+  // Normalize phone number (remove spaces, ensure +)
+  const normalizedPhone = phonenumber.replace(/\s+/g, '');
 
   try {
-    // Hash the password before saving
+    // 2️⃣ Check if phone number already exists
+    const existing = await pool.query(
+      'SELECT id FROM users WHERE phonenumber = $1',
+      [normalizedPhone]
+    );
+
+    if (existing.rows.length > 0) {
+      return res.status(400).json({ message: 'Phone number already in use.' });
+    }
+
+    // 3️⃣ Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Insert user into DB
-    await pool.query(
-      'INSERT INTO users (username, phonenumber, password) VALUES ($1, $2, $3)',
-      [username, phonenumber, hashedPassword]
+    // 4️⃣ Insert new user
+    const result = await pool.query(
+      'INSERT INTO users (username, phonenumber, password) VALUES ($1, $2, $3) RETURNING id, username, phonenumber',
+      [username, normalizedPhone, hashedPassword]
     );
-    
 
-    res.status(201).send({ message: 'User created successfully' });
+    res.status(201).json({
+      message: 'User created successfully.',
+      user: result.rows[0],
+    });
 
   } catch (err) {
-    console.error(err);
-    if (err.code === '23505') { // unique violation
-      res.status(400).json({ message: 'Username or email already exists' });
-    } else {
-      res.status(500).json({ message: 'Server error' });
+    console.error('Signup error:', err);
+
+    // 5️⃣ Catch unique constraint violation just in case
+    if (err.code === '23505') {
+      return res.status(400).json({ message: 'Phone number already exists.' });
     }
+
+    res.status(500).json({ message: 'Server error.' });
   }
 });
+
 
 // Login endpoint
 app.post('/api/login', async (req, res) => {

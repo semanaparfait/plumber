@@ -16,59 +16,77 @@ const API_URL =
     const navigate = useNavigate();
 
   // if (!showModal) return null; // Hide modal if false
-        const submitform = async (e) => {
-        e.preventDefault();
-        // Handle form submission logic here
-        console.log({ username, phonenumber, password });
+const submitform = async (e) => {
+  e.preventDefault();
+
+  const digits = phonenumber.replace(/\D/g, ""); // keep only digits
+
+  // 🚨 Phone validation
+  if (digits.length < 10 || digits.length > 12) {
+    alert("Phone number must be between 10 and 12 digits.");
+    return;
+  }
+
+  // 🚨 Password validation
+  if (!password || password.length < 6) {
+    alert("Password must be at least 6 characters long.");
+    return;
+  }
 
   if (action === "Sign up") {
-    // Call backend signup API
     try {
-       const response = await fetch(`${API_URL}/signup`, {  
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch(`${API_URL}/signup`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, phonenumber, password }),
       });
 
       const data = await response.json();
+
       if (response.ok) {
         alert(data.message);
-        // Optionally reset form fields here
-        setUsername('');
-        setPhonenumber('');
-        setPassword('');
+        setUsername("");
+        setPhonenumber("");
+        setPassword("");
       } else {
-        alert(data.message);
+        // ✅ Show server-side errors (duplicate phone number, etc.)
+        alert(data.message || "Signup failed.");
       }
     } catch (error) {
-      alert('Network error: ' + error.message);
+      alert("Network error: " + error.message);
     }
-  } else if (action === "Log in") {
-    // Call backend login API
+  }
+
+  if (action === "Log in") {
     try {
-      const response = await fetch(`${API_URL}/login`, { 
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-         credentials: 'include',
+      const response = await fetch(`${API_URL}/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({ phonenumber, password }),
       });
 
       const data = await response.json();
+
       if (response.ok) {
         alert(data.message);
-          if (data.is_admin === true) {
-        navigate("/admin"); // Navigate to admin page
-    } else {
-        navigate("/"); // Navigate to home page
-    }
+
+        if (data.is_admin === true) {
+          navigate("/admin");
+        } else {
+          navigate("/");
+        }
       } else {
-        alert(data.message);
+        alert(data.message || "Login failed.");
       }
     } catch (error) {
-      alert('Network error: ' + error.message);
+      alert("Network error: " + error.message);
     }
   }
 };
+
+// -------phone number validation---------
+  const isPhoneValid = (phone) => /^\+?[1-9]\d{1,14}$/.test(phone.trim());
     
   return (
     <div className='absolute top-0 left-0 w-full h-full bg-black/20 z-50'>
@@ -94,12 +112,45 @@ const API_URL =
         className=' border-2 rounded-[9px] outline-none h-[2rem] border-gray-400' 
         style={{padding:'10px 10px'}}/>
         }
-        <input type="number"
+        {/* <input type="number"
         value={phonenumber}
         onChange={(e) => setPhonenumber(e.target.value)}
         placeholder='Your Phone number'
         className=' border-2 rounded-[9px] outline-none h-[2rem] border-gray-400' 
-        style={{padding:'10px 10px'}}/>
+        style={{padding:'10px 10px'}}/> */}
+<input
+  type="tel"
+  value={phonenumber}
+  onChange={(e) => {
+    let val = e.target.value.replace(/[^\d+]/g, ""); // allow only digits and +
+    
+    if (val.startsWith("+")) {
+      // strip +, then limit digits to 12
+      const digits = val.slice(1).replace(/\D/g, "").slice(0, 12);
+      val = "+" + digits;
+    } else {
+      // no + → just digits max 12
+      val = val.replace(/\D/g, "").slice(0, 12);
+    }
+
+    setPhonenumber(val);
+  }}
+  placeholder="+250788123456"
+  className={`border-2 rounded-[9px] outline-none h-[2rem] border-gray-400 ${
+    phonenumber && (phonenumber.replace(/\D/g, "").length < 10 || phonenumber.replace(/\D/g, "").length > 12)
+      ? "border-red-500"
+      : "border-gray-400"
+  }`}
+  style={{ padding: "10px 10px" }}
+/>
+{phonenumber && (phonenumber.replace(/\D/g, "").length < 10) && (
+  <p className="text-red-600 text-sm mt-1">Phone number must be at least 10 digits.</p>
+)}
+{phonenumber && (phonenumber.replace(/\D/g, "").length > 12) && (
+  <p className="text-red-600 text-sm mt-1">Phone number cannot exceed 12 digits.</p>
+)}
+
+
         <input type="password" 
         value={password}
         onChange={(e) => setPassword(e.target.value)}
