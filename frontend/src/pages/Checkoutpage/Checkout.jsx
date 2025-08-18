@@ -85,7 +85,8 @@ const location = useLocation();
                 <input
                     type="text"
                     name="names"
-                    className="border rounded-md border-gray-400 p-2 w-full"
+                    className="border rounded-md border-gray-400  w-full"
+                    style={{padding:'4px 10px'}}
                 />
                 </div>
 
@@ -97,7 +98,8 @@ const location = useLocation();
                     <input
                     type="email"
                     name="email"
-                    className="border rounded-md border-gray-400 p-2 w-full"
+                    className="border rounded-md border-gray-400  w-full"
+                    style={{padding:'4px 10px'}}
                     />
                 </div>
                 <div className="flex-1 flex flex-col">
@@ -107,7 +109,8 @@ const location = useLocation();
                     <input
                     type="tel"
                     placeholder="+250 78X XXX XXX / +250 79X XXX XXX"
-                    className="border rounded-md border-gray-400 p-2 w-full"
+                    className="border rounded-md border-gray-400  w-full"
+                    style={{padding:'4px 10px'}}
                     />
                 </div>
                 </div>
@@ -120,7 +123,8 @@ const location = useLocation();
                     <input
                     type="text"
                     name="country"
-                    className="border rounded-md border-gray-400 p-2 w-full"
+                    className="border rounded-md border-gray-400  w-full"
+                    style={{padding:'4px 10px'}}
                     />
                 </div>
                 <div className="flex-1 flex flex-col">
@@ -130,7 +134,8 @@ const location = useLocation();
                     <input
                     type="text"
                     name="province"
-                    className="border rounded-md border-gray-400 p-2 w-full"
+                    className="border rounded-md border-gray-400  w-full"
+                    style={{padding:'4px 10px'}}
                     />
                 </div>
                 </div>
@@ -143,7 +148,8 @@ const location = useLocation();
                     <input
                     type="text"
                     name="district"
-                    className="border rounded-md border-gray-400 p-2 w-full"
+                    className="border rounded-md border-gray-400  w-full"
+                    style={{padding:'4px 10px'}}
                     />
                 </div>
                 <div className="flex-1 flex flex-col">
@@ -153,7 +159,8 @@ const location = useLocation();
                     <input
                     type="text"
                     name="sector"
-                    className="border rounded-md border-gray-400 p-2 w-full"
+                    className="border rounded-md border-gray-400  w-full"
+                    style={{padding:'4px 10px'}}
                     />
                 </div>
                 </div>
@@ -166,7 +173,8 @@ const location = useLocation();
                     <input
                     type="text"
                     name="cell"
-                    className="border rounded-md border-gray-400 p-2 w-full"
+                    className="border rounded-md border-gray-400  w-full"
+                    style={{padding:'4px 10px'}}
                     />
                 </div>
                 <div className="flex-1 flex flex-col">
@@ -176,7 +184,8 @@ const location = useLocation();
                     <input
                     type="text"
                     name="village"
-                    className="border rounded-md border-gray-400 p-2 w-full"
+                    className="border rounded-md border-gray-400  w-full"
+                    style={{padding:'4px 10px'}}
                     />
                 </div>
                 </div>
@@ -188,7 +197,8 @@ const location = useLocation();
                 <input
                     type="text"
                     placeholder="eg: kwarubangura / kukinamba"
-                    className="border rounded-md border-gray-400 p-2 w-full"
+                    className="border rounded-md border-gray-400  w-full"
+                    style={{padding:'4px 10px'}}
                 />
                 </div>
             </form>
@@ -266,7 +276,8 @@ const location = useLocation();
                 {cartItems.map((item) => (
                     <div key={item.cart_id} className='flex gap-5 mb-3'>
                     <div>
-                        <img src={`${API_URL}/uploads/${item.product_image1}`} alt={item.product_name} className='w-[4rem] rounded-[10px]' />
+                        <img src={`${API_URL}/uploads/${item.product_image1}`} alt={item.product_name} className='w-[4rem] rounded-[10px]' 
+                        loading='lazy'/>
                     </div>
                     <div>
                         <h2 className='font-bold'>{item.product_name}</h2>
