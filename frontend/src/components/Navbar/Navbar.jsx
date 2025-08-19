@@ -53,7 +53,7 @@ function Navbar() {
             <Link to ={`/cart`}>
             <i className="fa-solid fa-cart-arrow-down text-[20px]"></i>
             </Link>
-            <i className="fa-solid fa-user text-2xl"></i>
+            
         </div>
     </div>
     </div>

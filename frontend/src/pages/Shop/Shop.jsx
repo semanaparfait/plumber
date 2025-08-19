@@ -4,6 +4,8 @@ import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
 import Account from '../../components/Account/Account';
 import logo from '../../assets/logo/logo.jpg';
+import './Shop.css'
+
 
 function Shop() {
   const API_URL =
@@ -18,6 +20,29 @@ function Shop() {
   const [openAccount, setOpenAccount] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
   const [showFillFields, setShowFillFields] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
+
+  // ✅ Check login status from cookies on load
+useEffect(() => {
+  fetch(`${API_URL}/api/me`, {
+    credentials: "include"
+  })
+    .then(res => {
+      if (!res.ok) throw new Error("Not authenticated");
+      return res.json();
+    })
+    .then(data => {
+      setIsAuthenticated(true);
+      setUser(data); // store user info here
+    })
+    .catch(() => {
+      setIsAuthenticated(false);
+      setUser(null);
+    });
+}, []);
+
+
 
   // Fetch categories once
   useEffect(() => {
@@ -72,6 +97,20 @@ function Shop() {
       <h1 className="text-yellow">Oops! It looks like you missed some <br /> fields. Please fill them all in.</h1>
     </div>
   );
+  // ----------------logout-------------
+    // ✅ Logout function (clear cookie and update state)
+const handleLogout = async () => {
+  try {
+    await fetch(`${API_URL}/api/logout`, {
+      method: "POST",
+      credentials: "include",
+    });
+  } catch (err) {
+    console.error("Logout error:", err);
+  }
+  setIsAuthenticated(false);
+};
+
 
   return (
     <div>
@@ -99,9 +138,33 @@ function Shop() {
                 {cartlength.length ? cartlength.length : 0}
               </span>
             </Link>
-            <button className='rounded-[20px] border text-[#000000] cursor-pointer'
-              style={{ padding: '5px 12px' }}
-              onClick={() => setOpenAccount(true)}>Sign in</button>
+                {!isAuthenticated ? (
+              <button
+                className='rounded-[20px] border text-[#000000] cursor-pointer'
+                style={{ padding: '5px 12px' }}
+                onClick={() => setOpenAccount(true)}
+              >
+                Sign in
+              </button>
+            ) : (
+              <div className="relative dropdown">
+                <i className="fa-solid fa-user text-2xl cursor-pointer"></i>
+                <span>{user?.username}</span>
+                {/* Dropdown for logout */}
+               <div className="dropdown-menu">
+                <Link to={`/profile`}>
+                <button>Profile</button>
+                </Link>
+
+                  <button
+                    onClick={handleLogout}
+                    className="block text-left text-red-600 w-full"
+                  >
+                    Logout
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

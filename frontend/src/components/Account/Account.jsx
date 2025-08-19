@@ -69,6 +69,7 @@ const submitform = async (e) => {
       const data = await response.json();
 
       if (response.ok) {
+        localStorage.setItem("token", data.token);
         alert(data.message);
 
         if (data.is_admin === true) {

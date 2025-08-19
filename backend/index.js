@@ -205,9 +205,15 @@ app.get("/api/me", authenticateToken, (req, res) => {
   res.json({ id, username, phonenumber });
 });
 
-
-
-
+// -----logout-----------
+app.post("/api/logout", (req, res) => {
+  res.clearCookie("session_token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+  });
+  return res.json({ message: "Logged out successfully" });
+});
 
 // for admin
 app.get('/api/admin/users', async (req, res) => {
@@ -427,8 +433,6 @@ app.delete('/api/category/:id', async (req, res) => {
 
 
 // upload products
-
-
 
 // Set storage for uploaded files
 const storageproduct = multer.diskStorage({
@@ -687,8 +691,6 @@ router.post("/checkout", async (req, res) => {
     res.status(500).json({ error: "Something went wrong during checkout" });
   }
 });
-
-
 
 
 // Start server
