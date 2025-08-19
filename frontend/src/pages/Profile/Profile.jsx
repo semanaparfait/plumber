@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // ✅ useNavigate hook
 import Orderhistory from './Orderhistory';
+import { Link } from 'react-router-dom';
 
 function Profile() {
   const API_URL =
@@ -72,6 +73,9 @@ const totalPrice = cart.reduce((sum, item) => {
 }, 0);
   return (
     <div style={{padding:'30px'}}>
+        <Link to={`/`}>
+        <p className='text-[#0077be]'><i className="fa-solid fa-arrow-left"></i> Back to Home</p><br />
+        </Link>
         {/* --------------heading-------------- */}
         <div className='bg-[#0077be] rounded-[10px]' style={{padding:'20px 30px'}}>
 
