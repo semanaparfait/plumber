@@ -4,22 +4,14 @@ import Footer from '../../components/Footer/Footer';
 import Navbar from '../../components/Navbar/Navbar';
 
 // -----------------Notification Component-----------------
-function CartNotificationAdded({ item, onClose }) {
+function CartNotificationAdded({ item, onClose, count }) {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    // Show the notification with a slight delay to allow for the animation
     setIsVisible(true);
 
-    // Set a timer to start the fade-out process
-    const fadeOutTimer = setTimeout(() => {
-      setIsVisible(false);
-    }, 2500); // Start fade out after 2.5 seconds
-
-    // Set a timer to completely remove the component from the DOM after the animation
-    const removeTimer = setTimeout(() => {
-      onClose();
-    }, 3000); // Total display time: 2.5s (visible) + 0.5s (fade out)
+    const fadeOutTimer = setTimeout(() => setIsVisible(false), 2500);
+    const removeTimer = setTimeout(() => onClose(), 3000);
 
     return () => {
       clearTimeout(fadeOutTimer);
@@ -27,24 +19,34 @@ function CartNotificationAdded({ item, onClose }) {
     };
   }, [onClose]);
 
-  // Use a dynamic class based on the isVisible state
-  const notificationClasses = `
-    fixed top-10 right-4 z-50
-    flex items-center gap-2
-    rounded-lg shadow-lg text-white
-    bg-green-500 transition-all duration-500 ease-in-out
-    transform ${isVisible ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}
-  `;
+
 
   return (
-    <div className={notificationClasses} style={{ padding: "10px 20px" }}>
-      <i className="fa-regular fa-circle-check text-white"></i>
-      <div>
-        <h1 className="font-bold">{item.product_name}</h1>
-        <p>Added to cart</p>
+<div
+      className={`fixed top-20 right-4 z-50 transition-all duration-500 ease-in-out transform ${
+        isVisible ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
+      } `} 
+    >
+      <div className="flex items-center justify-between w-64 sm:w-72 h-12 sm:h-14 rounded-lg bg-[#232531] "style={{padding:'10px 10px'}}>
+        <div className="flex gap-2 items-center">
+          <i className="fa-solid fa-check-double text-green-500 text-center text[20px]"></i>
+
+          <div>
+            <p className="text-white">
+              {count} item{count > 1 ? "s" : ""} of {item.product_name}
+            </p>
+            <p className="text-gray-500">Successfully added to cart</p>
+          </div>
+        </div>
+        <button
+          onClick={() => setIsVisible(false)}
+          className="text-gray-600 hover:bg-white/5 p-1 rounded-md transition-colors"
+        >
+          ✕
+        </button>
       </div>
-      <button onClick={() => setIsVisible(false)} className="ml-4 font-bold">X</button>
     </div>
+
   );
 }
 
@@ -127,11 +129,11 @@ function Itemoverview() {
       <div style={{ padding: '30px' }}>
         {/* Conditionally render the notification */}
         {showNotification && (
-          <CartNotificationAdded item={item} onClose={() => setShowNotification(false)} />
+          <CartNotificationAdded item={item} count={count} onClose={() => setShowNotification(false)} />
         )}
         <div className="flex flex-col md:flex-row items-center justify-center gap-7">
           {/* ... (rest of your JSX) ... */}
-          <div>
+          <div className=''>
             <img 
                 src={`${API_URL}/uploads/${item.product_image1}`} 
                 alt={item.product_name} 

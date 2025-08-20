@@ -3,6 +3,7 @@ import React,{useState, useEffect} from 'react'
 import { useLocation, useNavigate, Link } from "react-router-dom";
 
 
+
 function Checkout() {
     // this stores the user who logged in
     const [user, setUser] = useState(null);
@@ -322,7 +323,10 @@ const location = useLocation();
                   Secure payment powered by MTN Mobile Money
                 </p>
               </div><br />
-               <form className='flex flex-col gap-3'>
+              <div className='text-center'>
+                <button className='font-semibold bg-[#0077be] text-amber-50 rounded-[6px]'style={{padding:'7px'}}>Confirm Order</button>
+              </div>
+               {/* <form className='flex flex-col gap-3'>
                <div className='flex flex-col gap-1'>
                 <label htmlFor="phonenumber" className='font-semibold'>Phone Number *</label>
                 <input type="number"
@@ -331,7 +335,7 @@ const location = useLocation();
                </div>
                <button className='font-semibold bg-[#0077be] text-amber-50 rounded-[6px]'style={{padding:'7px'}} >Pay Now - {totalPrice.toLocaleString()} - via MTN</button>
 
-               </form>
+               </form> */}
             </div><br />
             <div className="mt-6 bg-green-50 border border-green-200 rounded-lg p-4" style={{padding:'10px'}}>
                 <h1>Secure Checkout</h1>

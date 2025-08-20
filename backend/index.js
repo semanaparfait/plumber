@@ -219,7 +219,7 @@ app.post("/api/logout", (req, res) => {
 app.get('/api/admin/users', async (req, res) => {
   try {
     const result = await pool.query(
-      'SELECT id, username, phonenumber, password, created_at , is_admin FROM users WHERE is_admin = false'
+      'SELECT id, username, phonenumber, password, created_at , is_admin FROM users WHERE is_admin = false ORDER BY username ASC'
     );
     res.status(200).json(result.rows);
   } catch (err) {
@@ -691,6 +691,8 @@ router.post("/checkout", async (req, res) => {
     res.status(500).json({ error: "Something went wrong during checkout" });
   }
 });
+
+
 
 
 // Start server
