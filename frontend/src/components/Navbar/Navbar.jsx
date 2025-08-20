@@ -1,10 +1,24 @@
-import React, {useState} from 'react'
+import React, {useState,useEffect} from 'react'
 import './Navbar.css'
 import logo from '../../assets/logo/logo.jpg'
 import { Link } from 'react-router-dom'
 
 function Navbar() {
+      const API_URL =
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:5000"
+      : "https://einstein-plumbers1.onrender.com";
     const [activetab, setActivetab] = useState('home');
+      const [cartlength, setCartlength] = useState([]);
+        useEffect(() => {
+          fetch(`${API_URL}/api/cart`, {
+            method: "GET",
+            credentials: "include"
+          })
+            .then(res => res.json())
+            .then(data => setCartlength(data))
+            .catch(err => console.error('Error fetching cart length:', err));
+        }, [API_URL]);
   return (
     <div style={{padding:'10px '}}>
 
@@ -50,8 +64,11 @@ function Navbar() {
         </div>
         <div className='flex items-center gap-2.5'>
             <button className=' rounded-[20px] bg-[#0077be] text-[white] cursor-pointer' style={{padding:'5px 12px'}}>Book a call</button>
-            <Link to ={`/cart`}>
-            <i className="fa-solid fa-cart-arrow-down text-[20px]"></i>
+            <Link to={`/cart`} className="relative inline-block">
+              <i className="fa-solid fa-cart-arrow-down text-[20px]"></i>
+              <span className="absolute -bottom-4 left-1/1 -translate-x-1/2 bg-[#0077be] text-white font-bold rounded-full w-6 h-6 flex items-center justify-center text-sm">
+                {cartlength.length ? cartlength.length : 0}
+              </span>
             </Link>
             
         </div>
