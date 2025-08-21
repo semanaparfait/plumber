@@ -4,10 +4,13 @@ import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
 import Account from '../../components/Account/Account';
 import logo from '../../assets/logo/logo.jpg';
+
 import './Shop.css'
+import Loader from '../../components/Loader/Loader';
 
 
 function Shop() {
+
   const API_URL =
     process.env.NODE_ENV === "development"
       ? "http://localhost:5000"
@@ -22,55 +25,51 @@ function Shop() {
   const [showFillFields, setShowFillFields] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true); // ✅ add loading state
 
-  // ✅ Check login status from cookies on load
-useEffect(() => {
-  fetch(`${API_URL}/api/me`, {
-    credentials: "include"
-  })
-    .then(res => {
-      if (!res.ok) throw new Error("Not authenticated");
-      return res.json();
-    })
-    .then(data => {
-      setIsAuthenticated(true);
-      setUser(data); // store user info here
-    })
-    .catch(() => {
-      setIsAuthenticated(false);
-      setUser(null);
-    });
-}, []);
-
-
-
-  // Fetch categories once
   useEffect(() => {
-    fetch(`${API_URL}/api/categories`)
-      .then(res => res.json())
-      .then(data => setCategories(data))
-      .catch(err => console.error(err));
+    const fetchData = async () => {
+      try {
+        const [categoriesRes, productsRes, cartRes, userRes] = await Promise.all([
+          fetch(`${API_URL}/api/categories`),
+          fetch(`${API_URL}/api/products`),
+          fetch(`${API_URL}/api/cart`, { credentials: "include" }),
+          fetch(`${API_URL}/api/me`, { credentials: "include" }),
+        ]);
+
+        const [categoriesData, productsData, cartData, userData] = await Promise.all([
+          categoriesRes.json(),
+          productsRes.json(),
+          cartRes.json(),
+          userRes.ok ? userRes.json() : null,
+        ]);
+
+        setCategories(categoriesData);
+        setProducts(productsData);
+        setCartlength(cartData);
+
+        if (userData) {
+          setIsAuthenticated(true);
+          setUser(userData);
+        }
+      } catch (err) {
+        console.error("Error fetching data:", err);
+      } finally {
+        setLoading(false); // ✅ stop loader
+      }
+    };
+
+    fetchData();
   }, [API_URL]);
 
-  // Fetch products once
-  useEffect(() => {
-    fetch(`${API_URL}/api/products`)
-      .then(res => res.json())
-      .then(data => setProducts(data))
-      .catch(err => console.error(err));
-  }, [API_URL]);
-
-  // Fetch cart length
-  useEffect(() => {
-    fetch(`${API_URL}/api/cart`, {
-      method: "GET",
-      credentials: "include"
-    })
-      .then(res => res.json())
-      .then(data => setCartlength(data))
-      .catch(err => console.error('Error fetching cart length:', err));
-  }, [API_URL]);
-
+  // ✅ If still loading, show Loader only inside Shop
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Loader />
+      </div>
+    );
+  }
   // Filter products by selected category
   const filteredProducts = selectedCategory
     ? products.filter(p => {
@@ -125,7 +124,9 @@ const handleLogout = async () => {
             <img src={logo} alt="logo" className='w-[5rem]' loading='lazy' />
           </Link>
           <ul className='gap-5 cursor-pointer hidden md:flex'>
+            <Link to={`/`}>
             <li>Home</li>
+            </Link>
             <li>About</li>
             <Link to={`/services`}><li>Service</li></Link>
             <Link to={`/contactus`}><li>Contact</li></Link>
@@ -212,7 +213,7 @@ const handleLogout = async () => {
                   />
                   <div className='shadow-md rounded-bl-[10px] rounded-br-[10px]' style={{ paddingLeft: '20px' }}>
                     <h2 className='font-bold'>{product.product_name}</h2>
-                    <p>{product.product_description}</p>
+                    <p className='h-[3.3rem] overflow-y-hidden'>{product.product_description} </p>
                     <p className='font-black text-2xl text-amber-700'>
                       {Number(product.product_newprice).toLocaleString()} RWF
                     </p>

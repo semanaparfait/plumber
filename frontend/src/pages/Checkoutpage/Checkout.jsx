@@ -63,7 +63,53 @@ const location = useLocation();
   };
 
 //   fetching the user who wants to buy
+// checkout input handles
+const [step, setStep] = useState(1);
 
+const[fullname, setFullname] = useState("")
+const[email,setEmail] =  useState("")
+const[phonenumber,SetPhonenumber] = useState("")
+const[country,setCountry] = useState("")
+const[province,setProvince] = useState("")
+const[district,setDistrict] = useState("")
+const[sector,setSector] = useState("")
+const[cell,setCell] = useState("")
+const[village,setVillage] = useState("")
+const[streetnickname,setStreetnickname] = useState("")
+// -----------------errors-----------------
+const [errors, setErrors] = useState({});
+const [deliveryprice,setDelivery] = useState(5000)
+useEffect(() => {
+  // If user chooses pickup, delivery is free
+  setDelivery(selected === "pickup" ? 0 : 5000);
+}, [selected]);
+const finalTotal = totalPrice + deliveryprice;
+
+
+const handleConfirmOrder = () => {
+  let newErrors = {};
+
+  if (!fullname) newErrors.fullname = "Full names are needed";
+  if (!email) newErrors.email = "Email is required";
+  if (!phonenumber) newErrors.phonenumber = "Phone number is required";
+  if (!country) newErrors.country = "Country is reqires"
+  if (!province) newErrors.province = "province is reqires"
+  if (!district) newErrors.district = "district is reqires"
+  if (!sector) newErrors.sector = "sector is reqires"
+  if (!cell) newErrors.cell = "cell is reqires"
+  if (!village) newErrors.village = "village is reqires"
+  if (!streetnickname) newErrors.streetnickname = "streetnickname is reqires"
+
+
+  setErrors(newErrors);
+
+  if (Object.keys(newErrors).length > 0) return; // stop if errors exist
+
+  setStep(2);
+};
+
+
+  // pay -> go to step 3
 
 
   return (
@@ -72,7 +118,50 @@ const location = useLocation();
         <Link to={`/cart`}>
         <p className='text-[#0077be]'><i className="fa-solid fa-arrow-left"></i> Back to cart</p><br />
         </Link>
+
+      <div className="relative flex flex-col items-center justify-center w-full">
+        {/* Steps wrapper */}
+        <div className="relative flex justify-center items-center gap-20">
+          {/* Horizontal line */}
+          <div className="absolute top-1/2 left-0 right-0 border-b-2 border-gray-300 z-0"></div>
+
+          {/* Step 1 */}
+          <div className="flex flex-col items-center bg-white z-10">
+    <p
+      className={`w-6 h-6 rounded-full flex items-center justify-center 
+      ${step >= 1 ? "bg-[#0077be] text-white" : "bg-gray-300 text-black"}`}
+    >
+      1</p>
+            <span className="mt-2 text-sm">Checkout</span>
+          </div>
+
+          {/* Step 2 */}
+          <div className="flex flex-col items-center bg-white z-10">
+    <p
+      className={`w-6 h-6 rounded-full flex items-center justify-center 
+      ${step >= 2 ? "bg-[#0077be] text-white" : "bg-gray-300 text-black"}`}
+    >
+      2
+    </p>
+            <span className="mt-2 text-sm">Pay</span>
+          </div>
+
+          {/* Step 3 */}
+          <div className="flex flex-col items-center bg-white z-10">
+    <p
+      className={`w-6 h-6 rounded-full flex items-center justify-center 
+      ${step === 3 ? "bg-[#0077be] text-white" : "bg-gray-300 text-black"}`}
+    >
+      ✔
+    </p>
+            <span className="mt-2 text-sm">Receipt</span>
+          </div>
+        </div>
+      </div>
+
         <div className='flex flex-wrap items-center justify-evenly gap-3.5'>
+          {/* on step one fill the shipping address details */}
+          {step === 1 && (
         <div className='w-full md:w-[40%] '>
             <div >
             <div>
@@ -86,9 +175,14 @@ const location = useLocation();
                 <input
                     type="text"
                     name="names"
+                    value={fullname}
+                    onChange={(e)=>setFullname(e.target.value)}
                     className="border rounded-md border-gray-400  w-full"
                     style={{padding:'4px 10px'}}
                 />
+                {errors.fullname && (
+                  <p className="text-red-600 text-sm mb-3">{errors.fullname}</p>
+                )}
                 </div>
 
                 <div className="flex flex-col md:flex-row md:gap-4">
@@ -99,9 +193,14 @@ const location = useLocation();
                     <input
                     type="email"
                     name="email"
+                    value={email}
+                    onChange={(e)=>setEmail(e.target.value)}
                     className="border rounded-md border-gray-400  w-full"
                     style={{padding:'4px 10px'}}
                     />
+                {errors.email && (
+                  <p className="text-red-600 text-sm mb-3">{errors.email}</p>
+                )}
                 </div>
                 <div className="flex-1 flex flex-col">
                     <label htmlFor="phonenumber" className="font-semibold mb-1">
@@ -109,10 +208,15 @@ const location = useLocation();
                     </label>
                     <input
                     type="tel"
+                    value={phonenumber}
+                    onChange={(e)=>SetPhonenumber(e.target.value)}
                     placeholder="+250 78X XXX XXX / +250 79X XXX XXX"
                     className="border rounded-md border-gray-400  w-full"
                     style={{padding:'4px 10px'}}
                     />
+                  {errors.phonenumber && (
+                  <p className="text-red-600 text-sm mb-3">{errors.phonenumber}</p>
+                )}
                 </div>
                 </div>
 
@@ -123,10 +227,15 @@ const location = useLocation();
                     </label>
                     <input
                     type="text"
+                    value={country}
+                    onChange={(e)=>setCountry(e.target.value)}
                     name="country"
                     className="border rounded-md border-gray-400  w-full"
                     style={{padding:'4px 10px'}}
                     />
+                    {errors.country && (
+                  <p className="text-red-600 text-sm mb-3">{errors.country}</p>
+                )}
                 </div>
                 <div className="flex-1 flex flex-col">
                     <label htmlFor="province" className="font-semibold mb-1">
@@ -134,10 +243,15 @@ const location = useLocation();
                     </label>
                     <input
                     type="text"
+                    value={province}
+                    onChange={(e)=>setProvince(e.target.value)}
                     name="province"
                     className="border rounded-md border-gray-400  w-full"
                     style={{padding:'4px 10px'}}
                     />
+                  {errors.province && (
+                  <p className="text-red-600 text-sm mb-3">{errors.province}</p>
+                )}
                 </div>
                 </div>
 
@@ -148,10 +262,15 @@ const location = useLocation();
                     </label>
                     <input
                     type="text"
+                    value={district}
+                    onChange={(e)=>setDistrict(e.target.value)}
                     name="district"
                     className="border rounded-md border-gray-400  w-full"
                     style={{padding:'4px 10px'}}
                     />
+                  {errors.district && (
+                  <p className="text-red-600 text-sm mb-3">{errors.district}</p>
+                )}
                 </div>
                 <div className="flex-1 flex flex-col">
                     <label htmlFor="sector" className="font-semibold mb-1">
@@ -159,10 +278,15 @@ const location = useLocation();
                     </label>
                     <input
                     type="text"
+                    value={sector}
+                    onChange={(e)=>setSector(e.target.value)}
                     name="sector"
                     className="border rounded-md border-gray-400  w-full"
                     style={{padding:'4px 10px'}}
                     />
+                    {errors.sector && (
+                  <p className="text-red-600 text-sm mb-3">{errors.sector}</p>
+                )}
                 </div>
                 </div>
 
@@ -173,10 +297,15 @@ const location = useLocation();
                     </label>
                     <input
                     type="text"
+                    value={cell}
+                    onChange={(e)=>setCell(e.target.value)}
                     name="cell"
                     className="border rounded-md border-gray-400  w-full"
                     style={{padding:'4px 10px'}}
                     />
+                    {errors.cell && (
+                  <p className="text-red-600 text-sm mb-3">{errors.cell}</p>
+                )}
                 </div>
                 <div className="flex-1 flex flex-col">
                     <label htmlFor="village" className="font-semibold mb-1">
@@ -184,10 +313,15 @@ const location = useLocation();
                     </label>
                     <input
                     type="text"
+                    value={village}
+                    onChange={(e)=>setVillage(e.target.value)}
                     name="village"
                     className="border rounded-md border-gray-400  w-full"
                     style={{padding:'4px 10px'}}
                     />
+                    {errors.village && (
+                  <p className="text-red-600 text-sm mb-3">{errors.village}</p>
+                )}
                 </div>
                 </div>
 
@@ -197,10 +331,15 @@ const location = useLocation();
                 </label>
                 <input
                     type="text"
+                    value={streetnickname}
+                    onChange={(e)=>setStreetnickname(e.target.value)}
                     placeholder="eg: kwarubangura / kukinamba"
                     className="border rounded-md border-gray-400  w-full"
                     style={{padding:'4px 10px'}}
                 />
+                  {errors.streetnickname && (
+                  <p className="text-red-600 text-sm mb-3">{errors.streetnickname}</p>
+                )}
                 </div>
             </form>
             </div>
@@ -223,7 +362,7 @@ const location = useLocation();
                 <h2 className="font-bold">Home / Site delivery</h2>
                 <p>Get your tools delivered to your address</p>
                 </div>
-                <h2 className="text-blue-800 font-bold">5,000 RWF</h2>
+                <h2 className="text-blue-800 font-bold">{deliveryprice} RWF</h2>
             </div>
 
             {/* Store Pickup */}
@@ -269,6 +408,73 @@ const location = useLocation();
             
         </div>
         </div>
+          )}
+        {/* ---------------------step 2 after filling all addresses--------- */}
+        {step === 2 && (
+        <div className='w-full md:w-1/3'>
+          <h2 className='font-bold text-[17px]'>Customer Information</h2><br />
+        <div className='flex flex-col gap-3'>
+          <div className='flex flex-col gap-1.5'>
+            <p className='font-bold'>Full Names:</p>
+            <h1 className="border rounded-md border-gray-400  w-full font-semibold" style={{padding:'2px 10px'}}>{fullname}</h1>
+          </div>
+                    <div>
+            <p className='font-bold'>Email Addres:</p>
+            <h1 className="border rounded-md border-gray-400  w-full font-semibold" style={{padding:'2px 10px'}}>{email}</h1>
+          </div>
+                    <div>
+            <p className='font-bold'>Phone Number:</p>
+            <h1 className="border rounded-md border-gray-400  w-full font-semibold" style={{padding:'2px 10px'}}>+25{phonenumber}</h1>
+          </div>
+                    <div>
+            <p className='font-bold'>Country:</p>
+            <h1 className="border rounded-md border-gray-400  w-full font-semibold" style={{padding:'2px 10px'}}>{country}</h1>
+          </div>
+                    <div>
+            <p className='font-bold'>Province : </p>
+            <h1 className="border rounded-md border-gray-400  w-full font-semibold" style={{padding:'2px 10px'}}>{province}</h1>
+          </div>
+                    <div>
+            <p className='font-bold'>District :</p>
+            <h1 className="border rounded-md border-gray-400  w-full font-semibold" style={{padding:'2px 10px'}}>{district}</h1>
+          </div>
+                    <div>
+            <p className='font-bold'>Sector:</p>
+            <h1 className="border rounded-md border-gray-400  w-full font-semibold" style={{padding:'2px 10px'}}>{sector}</h1>
+          </div>
+                    <div>
+            <p className='font-bold'>Cell:</p>
+            <h1 className="border rounded-md border-gray-400  w-full font-semibold" style={{padding:'2px 10px'}}>{cell}</h1>
+          </div>
+                    <div>
+            <p className='font-bold'>Street Nickname:</p>
+            <h1 className="border rounded-md border-gray-400  w-full font-semibold" style={{padding:'2px 10px'}}>{streetnickname}</h1>
+          </div>
+
+
+        </div><br />
+        <h2 className='font-bold text-[17px]'>Delivery Method</h2>
+                        <div className='flex flex-col gap-1.5'>
+                <img src='https://i.pinimg.com/736x/78/1e/2c/781e2cdb91d16efbfe31b7b9a3202304.jpg' alt="delivery method methos" className='w-[7rem] rounded-[10px]' />
+            
+        </div>
+
+            <h2 className='font-bold text-[17px]'>Payment methos</h2>
+                <div className='flex flex-col gap-1.5'>
+                <img src='https://i.pinimg.com/736x/7f/eb/02/7feb0256dc66ee941c1a5d4c945ed60b.jpg' alt="payment methos" className='w-[4rem] rounded-[10px]' />
+            
+        </div>
+        </div>
+        )}
+              {/* Step 3: Receipt */}
+      {step === 3 && (
+        <div className="w-full text-center p-6 shadow-lg rounded-lg bg-green-50">
+          <h2 className="text-lg font-bold text-green-700">🎉 Order Successful!</h2>
+          <p className="mt-2">
+            Thank you, {fullname}. Your receipt has been sent to {email}.
+          </p>
+        </div>
+      )}
         {/* ------------payments and carts--------------- */}
         <div className='w-full  md:w-[45%] '>
             <div className='shadow-2xl rounded-[10px]'style={{padding:'30px'}}>
@@ -301,13 +507,13 @@ const location = useLocation();
                 {/* -----------for delivery----------------- */}
                 <div className='flex items-center justify-between'>
                     <p>Delivery</p>
-                    <p className='font-bold'>5000 RWF</p>
+                    <p className='font-bold '>{deliveryprice === 0 ? "FREE" : deliveryprice.toLocaleString() + " RWF"}</p>
                 </div>
             </div><br /><hr /><br />
             {/* --------------total-------------- */}
             <div className='flex items-center justify-between'>
                 <p className='font-bold'>Total</p>
-                <p className='font-bold text-[#0077b3]'>{totalPrice.toLocaleString()} RWF</p>
+                <p className='font-bold text-[#0077b3]'>{finalTotal.toLocaleString()} RWF</p>
 
             </div>
             </div><br />
@@ -323,10 +529,15 @@ const location = useLocation();
                   Secure payment powered by MTN Mobile Money
                 </p>
               </div><br />
+              {step == 1 && (
+
               <div className='text-center'>
-                <button className='font-semibold bg-[#0077be] text-amber-50 rounded-[6px]'style={{padding:'7px'}}>Confirm Order</button>
+                <button onClick={handleConfirmOrder} className='font-semibold bg-[#0077be] text-amber-50 rounded-[6px]'style={{padding:'7px'}}>Confirm Order</button>
               </div>
-               {/* <form className='flex flex-col gap-3'>
+              )}
+              {step === 2 && (
+
+               <form className='flex flex-col gap-3'>
                <div className='flex flex-col gap-1'>
                 <label htmlFor="phonenumber" className='font-semibold'>Phone Number *</label>
                 <input type="number"
@@ -335,7 +546,8 @@ const location = useLocation();
                </div>
                <button className='font-semibold bg-[#0077be] text-amber-50 rounded-[6px]'style={{padding:'7px'}} >Pay Now - {totalPrice.toLocaleString()} - via MTN</button>
 
-               </form> */}
+               </form>
+              )}
             </div><br />
             <div className="mt-6 bg-green-50 border border-green-200 rounded-lg p-4" style={{padding:'10px'}}>
                 <h1>Secure Checkout</h1>
