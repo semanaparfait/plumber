@@ -7,6 +7,7 @@ import Tables from '../../components/tables/Tables'
 import Producttable from '../../components/proucttable/Producttable'
 import { act } from 'react'
 import Carttable from '../../components/Carttable/Carttable'
+import Orderstable from '../../components/Orderstable/Orderstable'
 
 function Adminpage() {
     const API_URL = 
@@ -73,6 +74,7 @@ function Adminpage() {
                     <li onClick={()=>setActivetab("users")}>Accounts</li>
                     <li onClick={()=>setActivetab("product")}>Products</li>
                     <li onClick={()=>setActivetab("carts")}>carts</li>
+                    <li onClick={()=>setActivetab("orders")}>Orders</li>
                     <li onClick={()=>setActivetab("upload")}>Upload</li>
                     <li onClick={()=>setActivetab("hired us")}>Hired us</li>
                     <li onClick={()=>setActivetab("contacted us")}>contacted us</li>
@@ -167,6 +169,10 @@ function Adminpage() {
         {/* fetching users */}
         {activetab === 'users' && (
             <Tables/>
+        )}
+        {/* ------------ordertable--------- */}
+        {activetab === 'orders' && (
+            <Orderstable />
         )}
         {/* fetching products */}
         {activetab === 'product' && (

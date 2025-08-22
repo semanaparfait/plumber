@@ -2,6 +2,7 @@ import React, { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Loader from './components/Loader/Loader';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
+import Invoice from './pages/Invoice/Invoice';
 
 
 // Lazy load pages
@@ -15,11 +16,13 @@ const LazyAdminpage = lazy(() => import('./pages/Adminpage/Adminpage'));
 const LazyOrder = lazy(() => import('./pages/Order/Order'));
 const LazyCheckout = lazy(() => import('./pages/Checkoutpage/Checkout'));
 const LazyProfile = lazy(()=> import('./pages/Profile/Profile'))
+
 function App() {
   return (
     <BrowserRouter>
       <Suspense fallback={<Loader />}>
         <Routes>
+          <Route path='invoice' element={<Invoice />} />
           <Route path="/" element={<LazyHome />} />
           <Route path="/services" element={<LazyServices />} />
           <Route path="/contactus" element={<LazyContactUs />} />

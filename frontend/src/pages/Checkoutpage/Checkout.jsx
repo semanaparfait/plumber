@@ -1,12 +1,18 @@
 import React,{useState, useEffect} from 'react'
 // import mtn from '../../assets/checkout/mtn.jpeg'
 import { useLocation, useNavigate, Link } from "react-router-dom";
+import Invoice from '../Invoice/Invoice';
+import check from '../../assets/checkout/check.jpg'
 
 
 
-function Checkout() {
+
+function Checkout(props) {
+
     // this stores the user who logged in
-    const [user, setUser] = useState(null);
+    const [loggedinuser, setLoggedinuser] = useState(null);
+    const [orderId, setOrderId] = useState(null);
+
     const[deliverypickup,setDelivetypickup]=useState("delivery")
     const [selected, setSelected] = useState("delivery");
 const location = useLocation();
@@ -25,42 +31,71 @@ const location = useLocation();
     (sum, item) => sum + Number(item.product_newprice) * Number(item.quantity),
     0
   );
+  useEffect(() => {
+  fetch(`${API_URL}/api/me`, { credentials: 'include' })
+    .then(res => res.json())
+    .then(data => setLoggedinuser(data))
+    .catch(err => console.error(err));
+}, []);
 
-  const handlePlaceOrder = async () => {
-    if (cartItems.length === 0) {
-      alert("No items to order!");
-      return;
+
+const handlePlaceOrder = async () => {
+  if (!loggedinuser?.id) {
+    alert("Your session is not ready yet. Please wait a moment.");
+    return;
+  }
+
+  if (cartItems.length === 0) {
+    alert("No items to order!");
+    return;
+  }
+
+  setLoading(true);
+
+  try {
+    const res = await fetch(`${API_URL}/api/orders/checkout`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: loggedinuser.id,  // guaranteed to exist
+        fullName: fullname,
+        email,
+        phone: phonenumber,
+        country,
+        province,
+        district,
+        sector,
+        cell,
+        village,
+        street: streetnickname,
+        deliveryFee: deliveryprice,
+        deliveryMethod: selected
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.error || "Checkout failed");
     }
 
-    setLoading(true);
+    setOrderId(data.orderId);
+    setStep(3);
+    // navigate("/orders");
+  } catch (err) {
+    console.error("Checkout error:", err);
+    alert(err.message);
+  } finally {
+    setLoading(false);
+  }
+};
 
-    try {
-      const res = await fetch(`${API_URL}/api/orders/checkout`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          deliveryMethod,
-        }),
-      });
 
-      const data = await res.json();
 
-      if (!res.ok) {
-        throw new Error(data.error || "Checkout failed");
-      }
 
-      alert(`Order placed successfully! Order ID: ${data.orderId}`);
-      navigate("/orders"); // Optional: redirect to My Orders page
-    } catch (err) {
-      console.error("Checkout error:", err);
-      alert(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
 
 //   fetching the user who wants to buy
 // checkout input handles
@@ -467,15 +502,66 @@ const handleConfirmOrder = () => {
         </div>
         )}
               {/* Step 3: Receipt */}
-      {step === 3 && (
-        <div className="w-full text-center p-6 shadow-lg rounded-lg bg-green-50">
-          <h2 className="text-lg font-bold text-green-700">🎉 Order Successful!</h2>
-          <p className="mt-2">
-            Thank you, {fullname}. Your receipt has been sent to {email}.
-          </p>
-        </div>
-      )}
+        {/* {step === 3 && (
+          
+          <Invoice
+            customer={{
+              fullname,
+              email,
+              phone: phonenumber,
+              country,
+              province,
+              district,
+              sector,
+              cell,
+              village,
+              street: streetnickname
+            }}
+            items={cartItems}
+            deliveryMethod={selected}
+            deliveryFee={deliveryprice}
+            total={totalPrice}
+            grandTotal={finalTotal}
+            orderId={orderId}
+            date={new Date().toLocaleDateString()}
+          />
+        )} */}
+{step === 3 && (
+  <div className='text-center flex flex-col items-center justify-center gap-3'>
+    <h1 className='font-semibold text-2xl'>Success!</h1>
+    <p>Your order has been placed successfully. You can download your invoice below.</p>
+    <img src={check} alt="checked icon" className='w-[20rem]' /><br />
+
+    <Invoice
+      customer={{
+        fullname,
+        email,
+        phonenumber,
+        country,
+        province,
+        district,
+        sector,
+        cell,
+        village,
+        street: streetnickname,
+      }}
+      items={cartItems}
+      orderId={orderId}
+      date={new Date().toLocaleDateString()}
+      total={totalPrice}
+      grandTotal={finalTotal}
+      API_URL={API_URL}
+    />
+  </div>
+)}
+
+
+
         {/* ------------payments and carts--------------- */}
+        {/* { step === 3 && (
+        )} */}
+        {step !== 3 && (
+
         <div className='w-full  md:w-[45%] '>
             <div className='shadow-2xl rounded-[10px]'style={{padding:'30px'}}>
                 <h1 className='font-bold'>Order Summary</h1><br />
@@ -537,16 +623,16 @@ const handleConfirmOrder = () => {
               )}
               {step === 2 && (
 
-               <form className='flex flex-col gap-3'>
-               <div className='flex flex-col gap-1'>
-                <label htmlFor="phonenumber" className='font-semibold'>Phone Number *</label>
-                <input type="number"
-                placeholder='+250 78X XXX XXX / +250 79X XXX XXX'
-                className='border rounded-[7px] border-gray-500'style={{padding:'7px 10px'}}/>
-               </div>
-               <button className='font-semibold bg-[#0077be] text-amber-50 rounded-[6px]'style={{padding:'7px'}} >Pay Now - {totalPrice.toLocaleString()} - via MTN</button>
+          <form className='flex flex-col gap-3'>
+            <div className='flex flex-col gap-1'>
+              <label htmlFor="phonenumber" className='font-semibold'>Phone Number *</label>
+              <input type="number" placeholder='+250 78X XXX XXX / +250 79X XXX XXX' className='border rounded-[7px] border-gray-500' style={{padding:'7px 10px'}}/>
+            </div>
+            <button onClick={handlePlaceOrder} type= "button" className='font-semibold bg-[#0077be] text-amber-50 rounded-[6px]' style={{padding:'7px'}}>
+              Pay Now - {totalPrice.toLocaleString()} - via MTN
+            </button>
+          </form>
 
-               </form>
               )}
             </div><br />
             <div className="mt-6 bg-green-50 border border-green-200 rounded-lg p-4" style={{padding:'10px'}}>
@@ -560,6 +646,7 @@ const handleConfirmOrder = () => {
             </div><br />
 
         </div>
+        )}
         </div>
     </div>
   )

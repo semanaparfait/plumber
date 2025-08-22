@@ -692,6 +692,135 @@ router.post("/checkout", async (req, res) => {
   }
 });
 
+// -----------------------------------dangerzone----------------
+app.post('/api/orders/checkout', async (req, res) => {
+  const client = await pool.connect();
+
+  try {
+    const {
+      userId,
+      fullName,
+      email,
+      phone,
+      country,
+      province,
+      district,
+      sector,
+      cell,
+      village,
+      street,
+      deliveryFee
+    } = req.body;
+
+    // 1. Calculate subtotal from cart
+    const subtotalResult = await client.query(
+      `SELECT SUM(c.quantity * p.product_newprice) AS subtotal
+       FROM cart c
+       JOIN products p ON c.product_id = p.product_id
+       WHERE c.user_id = $1 AND c.cart_status = 'pending'`,
+      [userId]
+    );
+    const subtotal = subtotalResult.rows[0].subtotal || 0;
+    const totalAmount = parseFloat(subtotal) + parseFloat(deliveryFee || 0);
+
+    // 2. Start transaction
+    await client.query('BEGIN');
+
+    // Insert into orders
+    const orderResult = await client.query(
+      `INSERT INTO orders (
+        customer_id, full_name, email, phone_number,
+        country, province, district, sector, cell, village, street,
+        subtotal, delivery_fee, total_amount, order_status
+      ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,'PENDING')
+      RETURNING order_id`,
+      [
+        userId, fullName, email, phone,
+        country, province, district, sector, cell, village, street,
+        subtotal, deliveryFee, totalAmount
+      ]
+    );
+
+    const orderId = orderResult.rows[0].order_id;
+
+    // Insert order items
+    await client.query(
+      `INSERT INTO order_items (order_id, product_id, quantity, price)
+       SELECT $1, c.product_id, c.quantity, p.product_newprice
+       FROM cart c
+       JOIN products p ON c.product_id = p.product_id
+       WHERE c.user_id = $2 AND c.cart_status = 'pending'`,
+      [orderId, userId]
+    );
+
+    // Clear the cart
+    await client.query(
+      `DELETE FROM cart WHERE user_id = $1 AND cart_status = 'pending'`,
+      [userId]
+    );
+
+    // Commit transaction
+    await client.query('COMMIT');
+
+    res.status(200).json({ message: 'Order placed successfully!', orderId });
+  } catch (error) {
+    await client.query('ROLLBACK');
+    console.error('Checkout error:', error);
+    res.status(500).json({ error: 'Checkout failed. Please try again.' });
+  } finally {
+    client.release();
+  }
+});
+// -------------------fetching orders-------------
+app.get('/api/get/orders', async (req, res) => {
+  try {
+
+    const result = await pool.query(
+      `SELECT
+       * 
+      FROM 
+      orders
+      
+      `
+    );
+    res.json(result.rows);
+  }    
+   catch (err) {
+    console.error('Error fetching orders:', err);
+    res.status(500).send('Server error');
+  }
+  
+})
+// ---------------fetching orded items---------
+app.get('/api/get/ordereditems', async (req, res) => {
+  try {
+
+    const result = await pool.query(
+      `SELECT
+       * 
+      FROM 
+      order_items
+      
+      `
+    );
+    res.json(result.rows);
+  }    
+   catch (err) {
+    console.error('Error fetching orded_items :', err);
+    res.status(500).send('Server error');
+  }
+  
+})
+// ----------------------------fetching  for invoice------------
+
+
+
+
+
+
+
+
+
 
 
 

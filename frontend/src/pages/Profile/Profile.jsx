@@ -118,22 +118,33 @@ const totalPrice = cart.reduce((sum, item) => {
         </div>
 
         <div
+            onClick={() => setClickednav("carthistory")}
+            className={`rounded-[10px] p-2 flex items-center gap-2 ${
+            clickednav === "carthistory" ? "bg-[#0077be] text-white" : ""
+            }`}
+            style={{padding:'8px 13px'}}
+        >
+            <i className="fa-solid fa-clock-rotate-left"></i> Cart History
+        </div>
+
+        <div
             onClick={() => setClickednav("orderhistory")}
             className={`rounded-[10px] p-2 flex items-center gap-2 ${
             clickednav === "orderhistory" ? "bg-[#0077be] text-white" : ""
             }`}
             style={{padding:'8px 13px'}}
         >
-            <i className="fa-solid fa-clock-rotate-left"></i> Order History
+            <i className="fa-solid fa-location-dot"></i> Order History
         </div>
 
-        <div
-            onClick={() => setClickednav("address")}
+                <div
+            onClick={() => setClickednav("invoices")}
             className={`rounded-[10px] p-2 flex items-center gap-2 ${
-            clickednav === "address" ? "bg-[#0077be] text-white" : ""
+            clickednav === "invoices" ? "bg-[#0077be] text-white" : ""
             }`}
+            style={{padding:'8px 13px'}}
         >
-            <i className="fa-solid fa-location-dot"></i> Address
+            <i className="fa-solid fa-location-dot"></i> Invoices
         </div>
 
         <div
